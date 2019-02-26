@@ -1,12 +1,18 @@
 package com.todolist.service.impl;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.todolist.dto.ProjetDtoC;
 import com.todolist.persistence.entity.Projet;
 import com.todolist.persistence.repository.ProjetRepository;
 import com.todolist.service.IProjetServiceC;
 
+
+@Service
+@Transactional
 public class ProjetServiceC implements IProjetServiceC{
 
 	@Autowired 
