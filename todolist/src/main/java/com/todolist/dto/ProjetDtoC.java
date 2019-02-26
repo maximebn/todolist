@@ -6,7 +6,8 @@ public class ProjetDtoC {
 	private Long id;
 	
 	private String titre;
-
+	private Long idUtilisateur;
+	
 	public ProjetDtoC() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -26,6 +27,14 @@ public class ProjetDtoC {
 
 	public void setTitre(String titre) {
 		this.titre = titre;
+	}
+
+	public Long getIdUtilisateur() {
+		return idUtilisateur;
+	}
+
+	public void setIdUtilisateur(Long idUtilisateur) {
+		this.idUtilisateur = idUtilisateur;
 	}
 	
 	

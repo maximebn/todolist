@@ -24,7 +24,7 @@ public class Tache {
 	private String titre;
 	@Column (name = "Date_echeance", length=100, nullable=false)
 	private Date date;
-	@Column (name = "Priorite", length=100, nullable=false)
+	@Column (name = "Priorite", length=100, nullable=true)
 	private String priorite;
 	@Column (name = "Statut", length=100, nullable=false)
 	private String statut;

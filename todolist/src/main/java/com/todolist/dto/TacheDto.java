@@ -10,6 +10,7 @@ public class TacheDto {
 	private String statut;
 	private Long id;
 	private Long idProjet;
+	private Long idUtilisateur;
 	
 	public TacheDto() {
 		super();
@@ -61,6 +62,14 @@ public class TacheDto {
 
 	public void setIdProjet(Long idProjet) {
 		this.idProjet = idProjet;
+	}
+
+	public Long getIdUtilisateur() {
+		return idUtilisateur;
+	}
+
+	public void setIdUtilisateur(Long idUtilisateur) {
+		this.idUtilisateur = idUtilisateur;
 	}
 	
 	
