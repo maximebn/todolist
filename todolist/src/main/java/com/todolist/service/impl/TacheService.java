@@ -1,6 +1,6 @@
 package com.todolist.service.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -34,7 +34,7 @@ public class TacheService implements ITacheService {
 		tache.setPriorite(tacheDto.getPriorite());
 		tache.setStatut("En cours");
 		
-		ArrayList<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
+		List<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
 		taches.add(tache);
 		projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
 		

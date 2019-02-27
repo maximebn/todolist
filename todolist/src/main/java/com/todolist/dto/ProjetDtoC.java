@@ -1,5 +1,7 @@
 package com.todolist.dto;
 
+import com.todolist.persistence.entity.Projet;
+
 public class ProjetDtoC {
 
 	
@@ -11,6 +13,12 @@ public class ProjetDtoC {
 	public ProjetDtoC() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	
+	public ProjetDtoC(Projet projet) {
+		this.setId(projet.getId());
+		this.setTitre(projet.getTitre());
+		
 	}
 
 	public Long getId() {

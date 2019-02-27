@@ -1,6 +1,7 @@
 package com.todolist.persistence.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ public class Projet {
 	
 	@OneToMany
     @JoinColumn(name="IDProjet", referencedColumnName="id", nullable=false)
-    private ArrayList <Tache> taches;
+    private List<Tache> taches= new ArrayList<Tache>();
 	
 
 	public Long getId() {
@@ -50,11 +51,11 @@ public class Projet {
 		this.titre = titre;
 	}
 
-	public ArrayList<Tache> getTaches() {
+	public List<Tache> getTaches() {
 		return taches;
 	}
 
-	public void setTaches(ArrayList<Tache> taches) {
+	public void setTaches(List<Tache> taches) {
 		this.taches = taches;
 	}
 
