@@ -11,7 +11,7 @@ import com.todolist.service.ITacheService;
 
 @RestController
 @RequestMapping(value="/api/tache")
-public class tacheController {
+public class TacheController {
 	@Autowired
 	ITacheService tacheService;
 	

@@ -1,6 +1,6 @@
 package com.todolist.service.impl;
 
-import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.todolist.dto.ProjetDtoC;
 import com.todolist.persistence.entity.Projet;
-import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.persistence.repository.ProjetRepository;
 import com.todolist.persistence.repository.UtilisateurRepository;
 import com.todolist.service.IProjetServiceC;
@@ -32,12 +31,11 @@ public class ProjetServiceC implements IProjetServiceC{
 		Projet projet= new Projet();
 		projet.setTitre(projetDto.getTitre());
 		
-	Optional<Utilisateur> utilisateur= utilisateurRepository.findById(projetDto.getIdUtilisateur());
-	if (utilisateur.isPresent()) {
-		projet.setUtilisateur(utilisateur.get());
-	}
+	Set<Projet> projets= utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().getProjets();
+	projets.add(projet);
+	utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().setProjets(projets);
 	
-	
+		
 		projetRepository.save(projet);
 		projetDto.setId(projet.getId());
 		

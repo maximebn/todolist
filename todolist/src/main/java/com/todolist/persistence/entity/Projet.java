@@ -1,12 +1,14 @@
 package com.todolist.persistence.entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,9 +29,9 @@ public class Projet {
 	@Column (name = "Titre_projet", length=100, nullable=false)
 	private String titre;
 	
-	@ManyToOne
-    @JoinColumn(name="IDUtilisateur", referencedColumnName="id", nullable=false)
-    private Utilisateur  utilisateur;
+	@OneToMany
+    @JoinColumn(name="IDProjet", referencedColumnName="id", nullable=false)
+    private Set <Tache> taches;
 	
 
 	public Long getId() {
@@ -48,12 +50,14 @@ public class Projet {
 		this.titre = titre;
 	}
 
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
+	public Set<Tache> getTaches() {
+		return taches;
 	}
 
-	public void setUtilisateur(Utilisateur utilisateur) {
-		this.utilisateur = utilisateur;
+	public void setTaches(Set<Tache> taches) {
+		this.taches = taches;
 	}
+
+	
 	
 }

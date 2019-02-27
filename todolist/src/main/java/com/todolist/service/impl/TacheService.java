@@ -1,6 +1,6 @@
 package com.todolist.service.impl;
 
-import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.todolist.dto.TacheDto;
-import com.todolist.persistence.entity.Projet;
 import com.todolist.persistence.entity.Tache;
-import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.persistence.repository.ProjetRepository;
 import com.todolist.persistence.repository.TacheRepository;
 import com.todolist.persistence.repository.UtilisateurRepository;
@@ -36,15 +34,10 @@ public class TacheService implements ITacheService {
 		tache.setPriorite(tacheDto.getPriorite());
 		tache.setStatut("En cours");
 		
-		Optional<Projet> projet= projetRepository.findById(tacheDto.getIdProjet());
+		Set<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
+		taches.add(tache);
+		projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
 		
-		if (projet.isPresent()) {
-			tache.setProjet(projet.get());
-		}
-		Optional<Utilisateur> utilisateur = utilisateurRepository.findById(tacheDto.getIdUtilisateur());
-		if (utilisateur.isPresent()) {
-			tache.setUtilisateur(utilisateur.get());
-		}
 		
 		tacheRepository.save(tache);
 		tacheDto.setStatut(tache.getStatut());
