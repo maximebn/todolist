@@ -1,6 +1,6 @@
 package com.todolist.service.impl;
 
-import java.util.Set;
+import java.util.ArrayList;
 
 import javax.transaction.Transactional;
 
@@ -31,7 +31,7 @@ public class ProjetServiceC implements IProjetServiceC{
 		Projet projet= new Projet();
 		projet.setTitre(projetDto.getTitre());
 		
-	Set<Projet> projets= utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().getProjets();
+		ArrayList<Projet> projets= utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().getProjets();
 	projets.add(projet);
 	utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().setProjets(projets);
 	
