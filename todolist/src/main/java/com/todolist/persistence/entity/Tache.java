@@ -1,6 +1,6 @@
 package com.todolist.persistence.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,14 +21,13 @@ public class Tache {
 	@Column (name = "Titre_tache", length=100, nullable=false)
 	private String titre;
 	@Column (name = "Date_echeance", length=100, nullable=false)
-	private Date date;
+	private LocalDate date;
 	@Column (name = "Priorite", length=100, nullable=true)
 	private String priorite;
 	@Column (name = "Statut", length=100, nullable=false)
 	private String statut;
 	
 	
-
 	public Long getId() {
 		return id;
 	}
@@ -45,11 +44,11 @@ public class Tache {
 		this.titre = titre;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
@@ -69,6 +68,4 @@ public class Tache {
 		this.statut = statut;
 	}
 
-	
-	
 }

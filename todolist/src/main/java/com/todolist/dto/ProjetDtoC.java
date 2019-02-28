@@ -12,13 +12,11 @@ public class ProjetDtoC {
 	
 	public ProjetDtoC() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public ProjetDtoC(Projet projet) {
 		this.setId(projet.getId());
 		this.setTitre(projet.getTitre());
-		
 	}
 
 	public Long getId() {

@@ -1,5 +1,9 @@
 package com.todolist.controller;
 
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dto.TacheDto;
+import com.todolist.dto.TacheDtoMax;
 import com.todolist.service.ITacheService;
 
 @RestController
@@ -22,5 +27,10 @@ public class TacheController {
 		return tacheService.save(tacheDto);
 	}
 	
+	@GetMapping(value="/todayList")
+	public List<TacheDtoMax> getForToday(@RequestParam long id) throws ParseException{
+			LocalDate today = LocalDate.now();
+			return tacheService.findByDate(today, id);
+	}
 
 }

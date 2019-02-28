@@ -33,8 +33,8 @@ public class ProjetServiceC implements IProjetServiceC{
 		projet.setTitre(projetDto.getTitre());
 		
 		List<Projet> projets=  utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().getProjets();
-	projets.add(projet);
-	utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().setProjets(projets);
+		projets.add(projet);
+		utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().setProjets(projets);
 	
 		
 		projetRepository.save(projet);
@@ -51,7 +51,4 @@ public class ProjetServiceC implements IProjetServiceC{
 		return projetsDto;
 	}
 	
-	
-	
-
 }

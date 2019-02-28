@@ -2,19 +2,29 @@ package com.todolist.dto;
 
 import java.time.LocalDate;
 
-public class TacheDto {
+import com.todolist.persistence.entity.Tache;
+
+public class TacheDtoMax {
 	
+
+	private Long id;
 	private String titre;
 	private LocalDate date;
 	private String priorite;
 	private String statut;
-	private Long id;
-	private Long idProjet;
 	
 	
-	public TacheDto() {
+	public TacheDtoMax() {
 		super();
 	}
+	
+	public TacheDtoMax(Tache tache) {
+		this.setDate(tache.getDate());
+		this.setId(tache.getId());
+		this.setPriorite(tache.getPriorite());
+		this.setStatut(tache.getStatut());
+		this.setTitre(tache.getTitre());
+}
 
 	public String getTitre() {
 		return titre;
@@ -54,14 +64,6 @@ public class TacheDto {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getIdProjet() {
-		return idProjet;
-	}
-
-	public void setIdProjet(Long idProjet) {
-		this.idProjet = idProjet;
 	}
 
 }
