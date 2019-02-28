@@ -65,5 +65,12 @@ public class ProjetServiceC implements IProjetServiceC{
 		
 		return list;
 	}
+
+	@Override
+	public List<ProjetDtoC> deleteById(Long idProjet) {
+		projetRepository.deleteById(idProjet);
+		
+		return null;
+	}
 	
 }

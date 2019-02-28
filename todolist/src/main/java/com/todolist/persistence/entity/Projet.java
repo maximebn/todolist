@@ -3,6 +3,7 @@ package com.todolist.persistence.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +31,7 @@ public class Projet {
 	@Column (name = "Titre_projet", length=100, nullable=false)
 	private String titre;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="IDProjet", referencedColumnName="id", nullable=false)
     private List<Tache> taches= new ArrayList<Tache>();
 	

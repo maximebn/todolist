@@ -3,6 +3,7 @@ package com.todolist.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,5 +36,11 @@ public class ProjetControllerC {
 	@GetMapping(value="/idp/{idProjet}")
 	public List<TacheDto> findById( @PathVariable Long idProjet){
 		return projetService.findById(idProjet);
+	}
+	
+	@DeleteMapping(value="/idp/{idProjet}/{idUtilisateur}")
+	public List<ProjetDtoC> deleteById(@PathVariable Long idProjet, @PathVariable Long idUtilisateur){
+		 projetService.deleteById(idProjet);
+		 return projetService.findAll(idUtilisateur);
 	}
 }

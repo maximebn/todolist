@@ -13,4 +13,6 @@ public interface IProjetServiceC {
 
 	List<TacheDto> findById(Long idProjet);
 
+	List<ProjetDtoC> deleteById(Long idProjet);
+
 }
