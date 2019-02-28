@@ -43,4 +43,5 @@ IProjetServiceC projetService;
 		 projetService.deleteById(idProjet);
 		 return projetService.findAll(idUtilisateur);
 	}
+	
 }

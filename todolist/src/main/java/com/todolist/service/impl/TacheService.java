@@ -138,4 +138,11 @@ public class TacheService implements ITacheService {
 				.forEach(tache -> tache.setStatut(AttributsStatutsTaches.ENRETARD));
 	}
 
+	@Override
+	public List<TacheDto> deleteById(Long idTache) {
+		tacheRepository.deleteById(idTache);
+		
+		return null;
+	}
+
 }

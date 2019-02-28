@@ -12,5 +12,6 @@ public interface ITacheService {
 	List<TacheDtoMax> findByDate(LocalDate date, long id);
 	List<TacheDtoMax> triTacheByDate(List<TacheDtoMax> list);
 	List<TacheDtoMax> findForWeek(LocalDate today, long id);
+	List<TacheDto> deleteById(Long idTache);
 
 }
