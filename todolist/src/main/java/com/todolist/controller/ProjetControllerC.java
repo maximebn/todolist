@@ -21,9 +21,9 @@ public class ProjetControllerC {
 	IProjetServiceC projetService;
 	
 	
-	@PostMapping
-	public ProjetDtoC save(@RequestBody ProjetDtoC projetDto) {
-		return projetService.save(projetDto);
+	@PostMapping(value="/{idUtilisateur}")
+	public ProjetDtoC save(@RequestBody ProjetDtoC projetDto, @PathVariable Long idUtilisateur) {
+		return projetService.save(projetDto, idUtilisateur);
 	}
 	
 	@GetMapping(value="/{idUtilisateur}")

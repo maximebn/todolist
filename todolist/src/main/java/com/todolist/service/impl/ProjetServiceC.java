@@ -28,13 +28,13 @@ public class ProjetServiceC implements IProjetServiceC{
 	UtilisateurRepository utilisateurRepository;
 	
 	@Override
-	public ProjetDtoC save(ProjetDtoC projetDto) {
+	public ProjetDtoC save(ProjetDtoC projetDto, Long idUtilisateur) {
 		Projet projet= new Projet();
 		projet.setTitre(projetDto.getTitre());
 		
-		List<Projet> projets=  utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().getProjets();
+		List<Projet> projets=  utilisateurRepository.findById(idUtilisateur).get().getProjets();
 		projets.add(projet);
-		utilisateurRepository.findById(projetDto.getIdUtilisateur()).get().setProjets(projets);
+		utilisateurRepository.findById(idUtilisateur).get().setProjets(projets);
 	
 		
 		projetRepository.save(projet);

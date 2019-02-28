@@ -8,7 +8,7 @@ public class ProjetDtoC {
 	private Long id;
 	
 	private String titre;
-	private Long idUtilisateur;
+	
 	
 	public ProjetDtoC() {
 		super();
@@ -35,13 +35,7 @@ public class ProjetDtoC {
 		this.titre = titre;
 	}
 
-	public Long getIdUtilisateur() {
-		return idUtilisateur;
-	}
-
-	public void setIdUtilisateur(Long idUtilisateur) {
-		this.idUtilisateur = idUtilisateur;
-	}
+	
 	
 	
 }

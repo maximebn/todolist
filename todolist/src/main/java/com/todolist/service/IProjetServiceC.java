@@ -6,7 +6,7 @@ import com.todolist.dto.ProjetDtoC;
 
 public interface IProjetServiceC {
 
-	ProjetDtoC save(ProjetDtoC projetDto);
+	ProjetDtoC save(ProjetDtoC projetDto, Long idUtilisateur);
 
 	List<ProjetDtoC> findAll(Long idUtilisateur);
 
