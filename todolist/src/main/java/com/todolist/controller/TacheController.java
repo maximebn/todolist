@@ -32,5 +32,11 @@ public class TacheController {
 			LocalDate today = LocalDate.now();
 			return tacheService.findByDate(today, id);
 	}
+	
+	@GetMapping(value="/weekList")
+	public List<TacheDtoMax> getForNextWeek(@RequestParam long id) throws ParseException{
+			LocalDate today = LocalDate.now();
+			return tacheService.findForWeek(today, id);
+	}
 
 }

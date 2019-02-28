@@ -17,16 +17,16 @@ import com.todolist.service.IProjetServiceC;
 @RequestMapping(value="/api/projet")
 public class ProjetControllerC {
 	
-	@Autowired
-	IProjetServiceC projetService;
+@Autowired
+IProjetServiceC projetService;
 	
 	
-	@PostMapping(value="/{idUtilisateur}")
+@PostMapping(value="/{idUtilisateur}")
 	public ProjetDtoC save(@RequestBody ProjetDtoC projetDto, @PathVariable Long idUtilisateur) {
 		return projetService.save(projetDto, idUtilisateur);
 	}
 	
-	@GetMapping(value="/{idUtilisateur}")
+@GetMapping(value="/{idUtilisateur}")
 	public List<ProjetDtoC> findAll(@PathVariable Long idUtilisateur){
 		return projetService.findAll(idUtilisateur);
 	}
