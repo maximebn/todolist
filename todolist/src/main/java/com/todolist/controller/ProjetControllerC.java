@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dto.ProjetDtoC;
+import com.todolist.dto.TacheDto;
 import com.todolist.service.IProjetServiceC;
 
 @RestController
@@ -30,5 +31,9 @@ public class ProjetControllerC {
 	public List<ProjetDtoC> findAll(@PathVariable Long idUtilisateur){
 		return projetService.findAll(idUtilisateur);
 	}
-
+	
+	@GetMapping(value="/idp/{idProjet}")
+	public List<TacheDto> findById( @PathVariable Long idProjet){
+		return projetService.findById(idProjet);
+	}
 }

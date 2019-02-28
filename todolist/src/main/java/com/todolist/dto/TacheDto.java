@@ -2,6 +2,8 @@ package com.todolist.dto;
 
 import java.time.LocalDate;
 
+import com.todolist.persistence.entity.Tache;
+
 public class TacheDto {
 	
 	private String titre;
@@ -14,6 +16,14 @@ public class TacheDto {
 	
 	public TacheDto() {
 		super();
+	}
+
+	public TacheDto(Tache tache) {
+		this.setId(tache.getId());
+		this.setTitre(tache.getTitre());
+		this.setDate(tache.getDate());
+		this.setPriorite(tache.getPriorite());
+		this.setStatut(tache.getStatut());
 	}
 
 	public String getTitre() {

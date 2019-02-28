@@ -9,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.todolist.dto.ProjetDtoC;
+import com.todolist.dto.TacheDto;
 import com.todolist.persistence.entity.Projet;
+import com.todolist.persistence.entity.Tache;
 import com.todolist.persistence.repository.ProjetRepository;
 import com.todolist.persistence.repository.UtilisateurRepository;
 import com.todolist.service.IProjetServiceC;
+import com.todolist.utils.AttributsStatutsTaches;
 
 
 
@@ -49,6 +52,18 @@ public class ProjetServiceC implements IProjetServiceC{
 		List<Projet> projets=  utilisateurRepository.findById(idUtilisateur).get().getProjets();
 		List<ProjetDtoC> projetsDto= projets.stream().map(projet -> new ProjetDtoC(projet)).collect(Collectors.toList());
 		return projetsDto;
+	}
+
+	@Override
+	public List<TacheDto> findById(Long idProjet) {
+		Projet projet = projetRepository.findById(idProjet).get();
+		List<Tache> taches=projet.getTaches();
+		List<TacheDto> list = taches.stream()
+				.filter(tache -> (tache.getStatut() != AttributsStatutsTaches.DONE))
+				.map(tache -> new TacheDto(tache))
+				.collect(Collectors.toList());
+		
+		return list;
 	}
 	
 }
