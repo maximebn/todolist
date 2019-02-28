@@ -111,6 +111,7 @@ public class TacheService implements ITacheService {
 			return tacheListDto;
 		}
 	
+	
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	/** Tri d'une liste de tâches par date d'échéance.
 	 * @param List
