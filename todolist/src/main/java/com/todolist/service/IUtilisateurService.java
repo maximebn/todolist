@@ -6,6 +6,7 @@ import javax.mail.internet.AddressException;
 
 import com.todolist.dto.TacheDtoMax;
 import com.todolist.dto.UtilisateurDto;
+import com.todolist.persistence.entity.Utilisateur;
 
 public interface IUtilisateurService {
 	
@@ -18,5 +19,7 @@ public interface IUtilisateurService {
 	long calculTotalParPriorite(List<TacheDtoMax> list);
 
 	long getIndicePerformance(long idUtilisateur);
+
+	Utilisateur findByLoginAndPassword(String username, String password);
 
 }

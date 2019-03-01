@@ -10,6 +10,7 @@ import javax.mail.internet.AddressException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.todolist.dto.ProjetDtoC;
@@ -29,17 +30,27 @@ import com.todolist.utils.AttributsStatutsTaches;
 @Service
 @Transactional
 public class UtilisateurService implements IUtilisateurService {
-	private static String UnrecognizedUser = "Id de l'utilisateur non reconnu";
-	private static String UnrecognizedMail= "Adresse mail non valide ou déjà existante";
-
+	private static String unrecognizedUser = "Id de l'utilisateur non reconnu";
+	private static String unrecognizedMail= "Adresse mail non valide ou déjà existante";
+	private  BCryptPasswordEncoder passwordEncoder = new  BCryptPasswordEncoder();
 	
 	@Autowired UtilisateurRepository utilisateurRepository;
 	@Autowired IProjetServiceC projetService;
 	@Autowired ITacheService tacheService;;
 	@Autowired IEmailService emailService;
-	//@Autowired
-	//PasswordEncoder passwordEncoder;
+	@Autowired UtilisateurRepository utilisateurRepo;
 
+	// ---------------------------------------------------------------------------------------------------------------------------//
+	@Override
+	public Utilisateur findByLoginAndPassword(String username, String password) {
+		Utilisateur user = utilisateurRepo.findByLogin(username);
+		
+		if (passwordEncoder.matches(password, user.getPassword())) {
+			return user;
+		}
+		else throw new NotFoundException(unrecognizedUser);
+	}
+	
 	
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	/**
@@ -51,8 +62,8 @@ public class UtilisateurService implements IUtilisateurService {
 	public UtilisateurDto register(UtilisateurDto userDto) throws AddressException {
 		if (emailService.isValidEmailAddress(userDto.getMail()) && !emailService.isEmailAlreadyUsed(userDto.getMail())) {
 
-		//String encryptPass = passwordEncoder.encode(userDto.getPassword());
-		//userDto.setPassword(encryptPass);
+		String encryptPass = passwordEncoder.encode(userDto.getPassword());
+		userDto.setPassword(encryptPass);
 		
 		Utilisateur user = new Utilisateur();
 		user.setPrenom(userDto.getPrenom());
@@ -68,7 +79,7 @@ public class UtilisateurService implements IUtilisateurService {
 		return userDto;
 	}
 		else {
-			throw new AddressException(UnrecognizedMail);
+			throw new AddressException(unrecognizedMail);
 		}
 	}
 	
@@ -90,15 +101,18 @@ public class UtilisateurService implements IUtilisateurService {
 				if (emailService.isValidEmailAddress(userDto.getMail()) && !emailService.isEmailAlreadyUsed(userDto.getMail())) {
 					user.setMail(userDto.getMail());
 			}
-				else throw new AddressException(UnrecognizedMail);
+				else throw new AddressException(unrecognizedMail);
 			}
 			user.setPrenom(userDto.getPrenom());
-			user.setPassword(userDto.getPassword());
+			
+			if (!passwordEncoder.encode(userDto.getPassword()).equals(user.getPassword())) {
+				user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+			}
+	
 			utilisateurRepository.save(user);
 			return userDto;
-			
 		}
-		else throw new NotFoundException(UnrecognizedUser);
+		else throw new NotFoundException(unrecognizedUser);
 		}
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	
@@ -116,7 +130,7 @@ public class UtilisateurService implements IUtilisateurService {
 			if (opt.isPresent()) {
 				utilisateurRepository.deleteById(idUtilisateur);
 			}
-			else throw new NotFoundException(UnrecognizedUser);
+			else throw new NotFoundException(unrecognizedUser);
 		}
 		
 	
@@ -169,7 +183,7 @@ public class UtilisateurService implements IUtilisateurService {
 				}
 				return (long)indiceDePerformance;
 			}
-			else throw new NotFoundException(UnrecognizedUser);
+			else throw new NotFoundException(unrecognizedUser);
 		}
 			
 }
