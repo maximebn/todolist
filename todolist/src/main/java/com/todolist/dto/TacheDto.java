@@ -14,16 +14,15 @@ public class TacheDto {
 	private Long idProjet;
 	
 	
-	public TacheDto() {
-		super();
-	}
+	
 
-	public TacheDto(Tache tache) {
+	public TacheDto(Tache tache, Long idProjet) {
 		this.setId(tache.getId());
 		this.setTitre(tache.getTitre());
 		this.setDate(tache.getDate());
 		this.setPriorite(tache.getPriorite());
 		this.setStatut(tache.getStatut());
+		this.setIdProjet(idProjet);
 	}
 
 	public String getTitre() {

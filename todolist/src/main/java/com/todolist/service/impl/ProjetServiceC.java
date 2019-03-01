@@ -60,7 +60,7 @@ public class ProjetServiceC implements IProjetServiceC{
 		List<Tache> taches=projet.getTaches();
 		List<TacheDto> list = taches.stream()
 				.filter(tache -> (tache.getStatut() != AttributsStatutsTaches.DONE))
-				.map(tache -> new TacheDto(tache))
+				.map(tache -> new TacheDto(tache,idProjet))
 				.collect(Collectors.toList());
 		
 		return list;
