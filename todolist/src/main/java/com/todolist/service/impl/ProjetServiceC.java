@@ -20,6 +20,10 @@ import com.todolist.utils.AttributsStatutsTaches;
 
 
 
+/**
+ * @author Dell
+ *
+ */
 @Service
 @Transactional
 public class ProjetServiceC implements IProjetServiceC{
@@ -30,6 +34,13 @@ public class ProjetServiceC implements IProjetServiceC{
 	@Autowired
 	UtilisateurRepository utilisateurRepository;
 	
+
+	/**
+	 * Créer un projet
+	 * @param projetDto
+	 * @param idUtilisateur
+	 * @return ProjetDto
+	 */
 	@Override
 	public ProjetDtoC save(ProjetDtoC projetDto, Long idUtilisateur) {
 		Projet projet= new Projet();
@@ -47,6 +58,11 @@ public class ProjetServiceC implements IProjetServiceC{
 		return projetDto;
 	}
 
+	/**
+	 * Lister l'ensemble des projets d'un utilisateur donné.
+	 * @param idUtilisateur
+	 * @return List ProjetDto
+	 */
 	@Override
 	public List<ProjetDtoC> findAll(Long idUtilisateur) {
 		List<Projet> projets=  utilisateurRepository.findById(idUtilisateur).get().getProjets();
@@ -54,6 +70,11 @@ public class ProjetServiceC implements IProjetServiceC{
 		return projetsDto;
 	}
 
+	/**
+	 * Lister les tâches d'un projet d'un utilisateur donnée.
+	 * @param idProjet
+	 * @return List TacheDto
+	 */
 	@Override
 	public List<TacheDto> findById(Long idProjet) {
 		Projet projet = projetRepository.findById(idProjet).get();
@@ -66,6 +87,11 @@ public class ProjetServiceC implements IProjetServiceC{
 		return list;
 	}
 
+	/**
+	 * Supprimer un projet d'un utilisateur donné.
+	 * @param idProjet
+	 * @return List ProjetDto mise à jour
+	 */
 	@Override
 	public List<ProjetDtoC> deleteById(Long idProjet) {
 		projetRepository.deleteById(idProjet);
@@ -73,6 +99,10 @@ public class ProjetServiceC implements IProjetServiceC{
 		return null;
 	}
 
+	/**
+	 * Mettre à jour un projet d'un utilisateur donné.
+	 * @param projetDto
+	 */
 	@Override
 	public void update(ProjetDtoC projetDto) {
 	Projet projet = projetRepository.findById(projetDto.getId()).get();

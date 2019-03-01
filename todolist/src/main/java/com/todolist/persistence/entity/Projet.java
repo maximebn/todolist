@@ -16,8 +16,12 @@ import javax.persistence.Table;
 /**
  * 
  * @author Marielle
- * @description Entité projet 
- *
+ * @description Entité projet
+ * possède les attributs
+ * id: identifiant unique auto-généré, 
+ * titre : le titre du projet,
+ * taches: liste de Tache liées à ce projet.
+ *  @see Tache
  */
 
 @Entity
