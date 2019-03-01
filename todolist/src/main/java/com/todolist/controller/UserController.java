@@ -3,6 +3,7 @@ package com.todolist.controller;
 import javax.mail.internet.AddressException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,9 @@ public UtilisateurDto save(@RequestBody UtilisateurDto  userDto) throws AddressE
 public UtilisateurDto save(@RequestBody UtilisateurDto  userDto, @RequestParam Long idUtilisateur) throws AddressException {
 	return utilisateurService.updateUserData(userDto, idUtilisateur);
 }
-		
 
+@GetMapping(value="/user/completionIndex")
+public long getCompletionIndex(@RequestParam Long idUtilisateur) {
+	return utilisateurService.getIndicePerformance(idUtilisateur);
+}		
 }
