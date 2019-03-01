@@ -72,5 +72,12 @@ public class ProjetServiceC implements IProjetServiceC{
 		
 		return null;
 	}
+
+	@Override
+	public void update(ProjetDtoC projetDto) {
+	Projet projet = projetRepository.findById(projetDto.getId()).get();
+	projet.setTitre(projetDto.getTitre());
+	projetRepository.save(projet);	
+	}
 	
 }

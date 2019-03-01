@@ -15,4 +15,6 @@ public interface IProjetServiceC {
 
 	List<ProjetDtoC> deleteById(Long idProjet);
 
+	void update(ProjetDtoC projetDto);
+
 }
