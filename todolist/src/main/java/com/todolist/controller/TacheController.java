@@ -42,11 +42,10 @@ public class TacheController {
 	}
 
 	
-	//TODO créer une méthode findAll pour mettre à jour la liste des taches
 	@DeleteMapping(value="/{idTache}")
- 	public List<TacheDto> deleteById(@PathVariable Long idTache) {
-		tacheService.deleteById(idTache);
-		return null;
+ 	public void deleteById(@PathVariable Long idTache) {
+		return ;
+		
 	}
  		
 }
