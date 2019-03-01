@@ -169,6 +169,11 @@ public class TacheService implements ITacheService {
 		return tachesDto;
 	}
 
+	// ---------------------------------------------------------------------------------------------------------------------------//
+			/**Modifie une tache, via son id
+			*  @param tacheDto
+			*  @return 
+			*/
 		@Override
 		public void update(TacheDto tacheDto) {
 			Tache tache = tacheRepository.findById(tacheDto.getId()).get();
