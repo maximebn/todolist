@@ -3,6 +3,7 @@ package com.todolist.persistence.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Utilisateur {
 	@Column (name = "PassWord", length=100, nullable=false)
 	private String password;
 	
-	@OneToMany
+	@OneToMany(cascade=CascadeType.ALL)
     @JoinColumn(name="IDUtilisateur", referencedColumnName="id", nullable=false)
     private List<Projet> projets= new ArrayList<Projet>();
 	
