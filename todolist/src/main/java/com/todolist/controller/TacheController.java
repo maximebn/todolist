@@ -48,4 +48,9 @@ public class TacheController {
 		
 	}
  		
+	@GetMapping(value="/All/{idUtilisateur}")
+	public List<TacheDto> findAll(@PathVariable Long idUtilisateur) {
+		return tacheService.findAll(idUtilisateur);
+	}
+	
 }

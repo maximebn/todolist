@@ -44,4 +44,9 @@ IProjetServiceC projetService;
 		 return projetService.findAll(idUtilisateur);
 	}
 	
+	@PostMapping(value="/update")
+	public void update(@RequestBody ProjetDtoC projetDto) {
+		projetService.update(projetDto);
+		return;
+	}
 }

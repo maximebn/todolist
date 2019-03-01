@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,6 +150,24 @@ public class TacheService implements ITacheService {
 	public void deleteById(Long idTache) {
 		tacheRepository.deleteById(idTache);
 		return;
+	}
+
+	// ---------------------------------------------------------------------------------------------------------------------------//
+		/** Delete une tache, via son id
+		*  @param idUtilisateur
+		*  @return list
+		*/
+	
+	@Override
+	public List<TacheDto> findAll(Long idUtilisateur) {
+		List<Projet> projets = utilisateurRepository.findById(idUtilisateur).get().getProjets();
+		List<TacheDto> tachesDto = new ArrayList<>();
+		for (Projet projet : projets) {
+			List<Tache> taches = projet.getTaches();
+			taches.stream().filter(tache -> tache.getStatut() != AttributsStatutsTaches.DONE).map(tache -> new TacheDto(tache, projet.getId())).forEach(tacheDto-> tachesDto.add(tacheDto));;
+			
+		}
+		return tachesDto;
 	}
 
 	
