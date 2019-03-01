@@ -98,6 +98,7 @@ public class TacheService implements ITacheService {
 	 * @param date
 	 * @return List
 	 */
+	
 	@Override
 		public List<TacheDtoMax> findForWeek(LocalDate startDate, long idUtilisateur) {
 			List <TacheDtoMax> tacheListDto = new ArrayList<>();

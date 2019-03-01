@@ -38,5 +38,4 @@ public UtilisateurDto save(@RequestBody UtilisateurDto  userDto, @RequestParam L
 public long getCompletionIndex(@RequestParam Long idUtilisateur) {
 	return utilisateurService.getIndicePerformance(idUtilisateur);
 }		
-
 }

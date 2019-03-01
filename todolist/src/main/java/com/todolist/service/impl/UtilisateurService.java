@@ -131,17 +131,16 @@ public class UtilisateurService implements IUtilisateurService {
 			long nTransforme = 0;
 			for (TacheDtoMax t : list) {
 				if (t.getPriorite() != null) {
-					switch(t.getPriorite()) {
-					case AttributsPrioriteTaches.PRIORITAIRE : nTransforme += 5;
-					break;
-					case AttributsPrioriteTaches.IMPORTANTE  : nTransforme +=2;
-					break;
-					case AttributsPrioriteTaches.NORMALE  : nTransforme += 1;
-					break;
+					if (t.getPriorite() == AttributsPrioriteTaches.PRIORITAIRE)
+						nTransforme = nTransforme+ 5;
+					else if (t.getPriorite() == AttributsPrioriteTaches.IMPORTANTE)
+						 nTransforme = nTransforme+ 2;
+					else if (t.getPriorite() == AttributsPrioriteTaches.NORMALE)
+						 nTransforme = nTransforme+ 1;
 					}
+				else nTransforme = nTransforme+ 1;
 				}
-				else nTransforme += 1;
-			}
+			System.out.println(nTransforme);
 			return nTransforme;
 		}
 	
@@ -160,6 +159,8 @@ public class UtilisateurService implements IUtilisateurService {
 			if (opt.isPresent()) {
 				List <TacheDtoMax> tachesEnRetard = tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.ENRETARD).collect(Collectors.toList());
 				List <TacheDtoMax> tachesEffectuees= tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.DONE).collect(Collectors.toList());
+				System.out.println(tachesEffectuees.get(1));
+				
 				double nbreTotal = (double)(this.calculTotalParPriorite(tachesEffectuees) + this.calculTotalParPriorite(tachesEnRetard));
 				double indiceDePerformance = 0;
 				
