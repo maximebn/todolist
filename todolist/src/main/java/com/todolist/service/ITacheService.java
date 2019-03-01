@@ -14,6 +14,7 @@ public interface ITacheService {
 	List<TacheDtoMax> findForWeek(LocalDate today, long id);
 	void deleteById(Long idTache);
 	List<TacheDto> findAll(Long idUtilisateur);
+	void update(TacheDto tacheDto);
 	
 
 }

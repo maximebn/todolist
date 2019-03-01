@@ -16,6 +16,13 @@ public class TacheDto {
 	
 	
 
+
+
+	public TacheDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public TacheDto(Tache tache, Long idProjet) {
 		this.setId(tache.getId());
 		this.setTitre(tache.getTitre());

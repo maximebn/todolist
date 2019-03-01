@@ -169,6 +169,23 @@ public class TacheService implements ITacheService {
 		return tachesDto;
 	}
 
+		@Override
+		public void update(TacheDto tacheDto) {
+			Tache tache = tacheRepository.findById(tacheDto.getId()).get();
+			tache.setTitre(tacheDto.getTitre());
+			tache.setDate(tacheDto.getDate());
+			tache.setPriorite(tacheDto.getPriorite());
+			tache.setStatut(tacheDto.getStatut());
+			
+			List<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
+			taches.add(tache);
+			projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
+			
+			tacheRepository.save(tache);
+			return;
+			
+		}
+
 	
 	
 }

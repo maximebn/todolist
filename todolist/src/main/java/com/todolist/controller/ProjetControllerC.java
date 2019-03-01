@@ -38,7 +38,7 @@ IProjetServiceC projetService;
 		return projetService.findById(idProjet);
 	}
 	
-	@DeleteMapping(value="/idp/{idProjet}/{idUtilisateur}")
+	@DeleteMapping(value="/delete/{idProjet}/{idUtilisateur}")
 	public List<ProjetDtoC> deleteById(@PathVariable Long idProjet, @PathVariable Long idUtilisateur){
 		 projetService.deleteById(idProjet);
 		 return projetService.findAll(idUtilisateur);

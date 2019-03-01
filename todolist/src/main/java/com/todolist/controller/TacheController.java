@@ -53,4 +53,9 @@ public class TacheController {
 		return tacheService.findAll(idUtilisateur);
 	}
 	
+	@PostMapping(value="/update")
+	public void update(@RequestBody TacheDto tacheDto) {
+		tacheService.update(tacheDto);
+		return;
+	}
 }
