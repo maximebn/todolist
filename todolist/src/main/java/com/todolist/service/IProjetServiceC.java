@@ -34,7 +34,7 @@ public interface IProjetServiceC {
 	 * @param idProjet
 	 * @return List ProjetDto mise à jour
 	 */
-	List<ProjetDtoC> deleteById(Long idProjet);
+	void deleteById(Long idProjet);
 
 	/**
 	 * Mettre à jour un projet d'un utilisateur donné.

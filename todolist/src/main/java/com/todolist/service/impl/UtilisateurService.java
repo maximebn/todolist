@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.todolist.dto.ProjetDtoC;
-import com.todolist.dto.TacheDtoMax;
+import com.todolist.dto.TacheDto;
 import com.todolist.dto.UtilisateurDto;
 import com.todolist.exception.NotFoundException;
 import com.todolist.persistence.entity.Utilisateur;
@@ -30,13 +30,12 @@ import com.todolist.utils.AttributsStatutsTaches;
 @Service
 @Transactional
 public class UtilisateurService implements IUtilisateurService {
-	private static String unrecognizedUser = "Id de l'utilisateur non reconnu";
 	private static String unrecognizedMail= "Adresse mail non valide ou déjà existante";
 	private  BCryptPasswordEncoder passwordEncoder = new  BCryptPasswordEncoder();
 	
 	@Autowired UtilisateurRepository utilisateurRepository;
 	@Autowired IProjetServiceC projetService;
-	@Autowired ITacheService tacheService;;
+	@Autowired ITacheService tacheService;
 	@Autowired IEmailService emailService;
 	@Autowired UtilisateurRepository utilisateurRepo;
 
@@ -48,7 +47,7 @@ public class UtilisateurService implements IUtilisateurService {
 		if (passwordEncoder.matches(password, user.getPassword())) {
 			return user;
 		}
-		else throw new NotFoundException(unrecognizedUser);
+		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 	}
 	
 	
@@ -112,7 +111,7 @@ public class UtilisateurService implements IUtilisateurService {
 			utilisateurRepository.save(user);
 			return userDto;
 		}
-		else throw new NotFoundException(unrecognizedUser);
+		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 		}
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	
@@ -130,7 +129,7 @@ public class UtilisateurService implements IUtilisateurService {
 			if (opt.isPresent()) {
 				utilisateurRepository.deleteById(idUtilisateur);
 			}
-			else throw new NotFoundException(unrecognizedUser);
+			else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 		}
 		
 	
@@ -141,12 +140,12 @@ public class UtilisateurService implements IUtilisateurService {
 		 * @return long
 		 */
 	@Override
-		public long calculTotalParPriorite(List<TacheDtoMax> list) {
+		public long calculTotalParPriorite(List<TacheDto> list) {
 			long nTransforme = 0;
-			for (TacheDtoMax t : list) {
+			for (TacheDto t : list) {
 				if (t.getPriorite() != null) {
 					if (t.getPriorite() == AttributsPrioriteTaches.PRIORITAIRE)
-						nTransforme = nTransforme+ 5;
+						nTransforme = nTransforme+ 3;
 					else if (t.getPriorite() == AttributsPrioriteTaches.IMPORTANTE)
 						 nTransforme = nTransforme+ 2;
 					else if (t.getPriorite() == AttributsPrioriteTaches.NORMALE)
@@ -171,19 +170,19 @@ public class UtilisateurService implements IUtilisateurService {
 			LocalDate sixDaysAgo = LocalDate.now().minusDays(6);
 			
 			if (opt.isPresent()) {
-				List <TacheDtoMax> tachesEnRetard = tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.ENRETARD).collect(Collectors.toList());
-				List <TacheDtoMax> tachesEffectuees= tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.DONE).collect(Collectors.toList());
+				List <TacheDto> tachesEnRetard = tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.ENRETARD).collect(Collectors.toList());
+				List <TacheDto> tachesEffectuees= tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.DONE).collect(Collectors.toList());
 				System.out.println(tachesEffectuees.get(1));
 				
 				double nbreTotal = (double)(this.calculTotalParPriorite(tachesEffectuees) + this.calculTotalParPriorite(tachesEnRetard));
 				double indiceDePerformance = 0;
 				
-				if (nbreTotal != 0) {
+				if (nbreTotal > 0) {
 					indiceDePerformance = (this.calculTotalParPriorite(tachesEffectuees) / nbreTotal)*100;
 				}
 				return (long)indiceDePerformance;
 			}
-			else throw new NotFoundException(unrecognizedUser);
+			else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 		}
 			
 }

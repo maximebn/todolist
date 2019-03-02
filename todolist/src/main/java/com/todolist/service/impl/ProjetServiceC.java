@@ -1,6 +1,7 @@
 package com.todolist.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -10,14 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.todolist.dto.ProjetDtoC;
 import com.todolist.dto.TacheDto;
+import com.todolist.exception.NotFoundException;
 import com.todolist.persistence.entity.Projet;
-import com.todolist.persistence.entity.Tache;
+import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.persistence.repository.ProjetRepository;
 import com.todolist.persistence.repository.UtilisateurRepository;
 import com.todolist.service.IProjetServiceC;
 import com.todolist.utils.AttributsStatutsTaches;
-
-
 
 
 /**
@@ -46,16 +46,17 @@ public class ProjetServiceC implements IProjetServiceC{
 		Projet projet= new Projet();
 		projet.setTitre(projetDto.getTitre());
 		
-		List<Projet> projets=  utilisateurRepository.findById(idUtilisateur).get().getProjets();
-		projets.add(projet);
-		utilisateurRepository.findById(idUtilisateur).get().setProjets(projets);
-	
+		Optional<Utilisateur> user = utilisateurRepository.findById(idUtilisateur);
 		
-		projetRepository.save(projet);
-		projetDto.setId(projet.getId());
-		
-		
-		return projetDto;
+		if (user.isPresent()) {
+			user.get().getProjets().add(projet);
+			user.get().setProjets(user.get().getProjets());
+			
+			projetRepository.save(projet);
+			projetDto.setId(projet.getId());
+			return projetDto;
+		}
+		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 	}
 
 	/**
@@ -65,9 +66,13 @@ public class ProjetServiceC implements IProjetServiceC{
 	 */
 	@Override
 	public List<ProjetDtoC> findAll(Long idUtilisateur) {
-		List<Projet> projets=  utilisateurRepository.findById(idUtilisateur).get().getProjets();
-		List<ProjetDtoC> projetsDto= projets.stream().map(projet -> new ProjetDtoC(projet)).collect(Collectors.toList());
-		return projetsDto;
+		Optional<Utilisateur> user = utilisateurRepository.findById(idUtilisateur);
+		
+		if (user.isPresent()) {
+			return user.get().getProjets().stream()
+					.map(projet -> new ProjetDtoC(projet)).collect(Collectors.toList());
+		}
+		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 	}
 
 	/**
@@ -77,14 +82,15 @@ public class ProjetServiceC implements IProjetServiceC{
 	 */
 	@Override
 	public List<TacheDto> findById(Long idProjet) {
-		Projet projet = projetRepository.findById(idProjet).get();
-		List<Tache> taches=projet.getTaches();
-		List<TacheDto> list = taches.stream()
-				.filter(tache -> (tache.getStatut() != AttributsStatutsTaches.DONE))
-				.map(tache -> new TacheDto(tache,idProjet))
-				.collect(Collectors.toList());
+		Optional<Projet> projet = projetRepository.findById(idProjet);
 		
-		return list;
+		if (projet.isPresent()) {
+			
+			return projet.get().getTaches().stream()
+					.filter(tache -> (tache.getStatut() != AttributsStatutsTaches.DONE))
+					.map(tache -> new TacheDto(tache,idProjet)).collect(Collectors.toList());
+		}
+		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDPROJECT);
 	}
 
 	/**
@@ -93,10 +99,8 @@ public class ProjetServiceC implements IProjetServiceC{
 	 * @return List ProjetDto mise à jour
 	 */
 	@Override
-	public List<ProjetDtoC> deleteById(Long idProjet) {
+	public void deleteById(Long idProjet) {
 		projetRepository.deleteById(idProjet);
-		
-		return null;
 	}
 
 	/**
@@ -105,9 +109,13 @@ public class ProjetServiceC implements IProjetServiceC{
 	 */
 	@Override
 	public void update(ProjetDtoC projetDto) {
-	Projet projet = projetRepository.findById(projetDto.getId()).get();
-	projet.setTitre(projetDto.getTitre());
-	projetRepository.save(projet);	
+		Optional<Projet> projet = projetRepository.findById(projetDto.getId());
+		
+		if (projet.isPresent()) {
+			projet.get().setTitre(projetDto.getTitre());
+			projetRepository.save(projet.get());	
+		}
+		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDPROJECT);
 	}
 	
 }

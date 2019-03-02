@@ -68,7 +68,7 @@ public class OAuth2ServerConfig {
 		public DefaultTokenServices tokenServices() {
 			DefaultTokenServices tokenServices = new DefaultTokenServices();
 			tokenServices.setAccessTokenValiditySeconds(300000);
-			tokenServices.setSupportRefreshToken(true);
+			tokenServices.setSupportRefreshToken(false);
 			tokenServices.setTokenStore(this.tokenStore);
 			return tokenServices;
 		}

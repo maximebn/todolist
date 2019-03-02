@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.formation.projet1.exception.NotIdentifiedException;
 import com.todolist.dto.UtilisateurDto;
 import com.todolist.service.IProjetServiceC;
 import com.todolist.service.IUtilisateurService;
@@ -31,6 +32,8 @@ public UtilisateurDto save(@RequestBody UtilisateurDto  userDto) throws AddressE
 
 @PostMapping(value="/user/update")
 public UtilisateurDto save(@RequestBody UtilisateurDto  userDto, @RequestParam Long idUtilisateur) throws AddressException {
+	if (authChecker.isBenevole() == null) throw new NotIdentifiedException();
+
 	return utilisateurService.updateUserData(userDto, idUtilisateur);
 }
 

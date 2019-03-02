@@ -15,17 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dto.TacheDto;
-import com.todolist.dto.TacheDtoMax;
 import com.todolist.service.ITacheService;
 
-/**
- * @author Dell
- *
- */
-/**
- * @author Dell
- *
- */
 /**
  * @author Dell
  *
@@ -54,7 +45,7 @@ public class TacheController {
 	 * @throws ParseException
 	 */
 	@GetMapping(value="/todayList")
-	public List<TacheDtoMax> getForToday(@RequestParam long id) throws ParseException{
+	public List<TacheDto> getForToday(@RequestParam long id) {
 			LocalDate today = LocalDate.now();
 			return tacheService.findByDate(today, id);
 	}
@@ -65,7 +56,7 @@ public class TacheController {
 	 * @throws ParseException
 	 */
 	@GetMapping(value="/weekList")
-	public List<TacheDtoMax> getForNextWeek(@RequestParam long id) throws ParseException{
+	public List<TacheDto> getForNextWeek(@RequestParam long id) {
 			LocalDate today = LocalDate.now();
 			return tacheService.findForWeek(today, id);
 	}
@@ -74,9 +65,7 @@ public class TacheController {
 	 * @param idTache
 	 */
 	@DeleteMapping(value="/{idTache}")
- 	public void deleteById(@PathVariable Long idTache) {
-		return ;
-		
+ 	public void deleteById(@PathVariable Long idTache) {		
 	}
  		
 	
@@ -96,6 +85,5 @@ public class TacheController {
 	@PostMapping(value="/update")
 	public void update(@RequestBody TacheDto tacheDto) {
 		tacheService.update(tacheDto);
-		return;
 	}
 }

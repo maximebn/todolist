@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.todolist.dto.TacheDto;
-import com.todolist.dto.TacheDtoMax;
 import com.todolist.exception.NotFoundException;
 import com.todolist.persistence.entity.Projet;
 import com.todolist.persistence.entity.Tache;
@@ -29,17 +28,11 @@ import com.todolist.utils.AttributsStatutsTaches;
 @Service
 @Transactional
 public class TacheService implements ITacheService {
-	@Autowired
-	TacheRepository tacheRepository;
 	
-	@Autowired
-	ProjetRepository projetRepository;
-	
-	@Autowired
-	UtilisateurRepository utilisateurRepository;
-	
-	@Autowired 
-	IProjetServiceC projetService;
+	@Autowired TacheRepository tacheRepository;
+	@Autowired ProjetRepository projetRepository;
+	@Autowired UtilisateurRepository utilisateurRepository;
+	@Autowired IProjetServiceC projetService;
 	
 	
 	// ---------------------------------------------------------------------------------------------------------------------------//
@@ -60,12 +53,10 @@ public class TacheService implements ITacheService {
 		taches.add(tache);
 		projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
 		
-
 		tacheRepository.save(tache);
 		tacheDto.setStatut(tache.getStatut());
 		tacheDto.setId(tache.getId());
 		return tacheDto;
-		
 	}
 	
 	// ---------------------------------------------------------------------------------------------------------------------------//
@@ -75,22 +66,22 @@ public class TacheService implements ITacheService {
 	 * @return List
 	 */
 	@Override
-	public List<TacheDtoMax> findByDate(LocalDate date, long idUtilisateur) {
+	public List<TacheDto> findByDate(LocalDate date, long idUtilisateur) {
 		Optional<Utilisateur> u = utilisateurRepository.findById(idUtilisateur);
-		List <TacheDtoMax> tacheListDto = new ArrayList<>();
+		List <TacheDto> tacheListDto = new ArrayList<>();
 		
 		if (u.isPresent()) {
 			
 			for (Projet p : u.get().getProjets()) {
 				p.getTaches().stream()
 									.filter(tache -> (tache.getDate().isEqual(date) && (tache.getStatut() != AttributsStatutsTaches.DONE)) || tache.getStatut() == AttributsStatutsTaches.ENRETARD)
-									.map(tache -> new TacheDtoMax(tache))
+									.map(tache -> new TacheDto(tache, p.getId()))
 									.forEach(dtotache -> tacheListDto.add(dtotache));
-				};
+				}
 				return tacheListDto;
 		}
 		else {
-			throw new NotFoundException ("Utilisateur non trouvé");
+			throw new NotFoundException (NotFoundException.UNRECOGNIZEDUSER);
 		}
 	}
 	
@@ -102,15 +93,14 @@ public class TacheService implements ITacheService {
 	 */
 	
 	@Override
-		public List<TacheDtoMax> findForWeek(LocalDate startDate, long idUtilisateur) {
-			List <TacheDtoMax> tacheListDto = new ArrayList<>();
+		public List<TacheDto> findForWeek(LocalDate startDate, long idUtilisateur) {
+			List <TacheDto> tacheListDto = new ArrayList<>();
 			
 			for (int i=0; i<7; i++) {
 				LocalDate date = startDate.plusDays(i);
 				this.findByDate(date, idUtilisateur)
 					.forEach(dtotache -> tacheListDto.add(dtotache));
 				}
-			
 			return tacheListDto;
 		}
 	
@@ -121,7 +111,7 @@ public class TacheService implements ITacheService {
 	 * @return List
 	 */
 	@Override
-	public List<TacheDtoMax> triTacheByDate(List<TacheDtoMax> list) {
+	public List<TacheDto> triTacheByDate(List<TacheDto> list) {
 		list.sort((l1, l2) -> l1.getDate().compareTo(l2.getDate()));
 		return list;
 	}
@@ -134,7 +124,7 @@ public class TacheService implements ITacheService {
 	 *  @return void
 	 */
 	@Scheduled(cron = " 0 0 1 * * * " )
-	public void updateStatutTaches(List<TacheDtoMax> list) {
+	public void updateStatutTaches(List<TacheDto> list) {
 		List<Tache> taches = tacheRepository.findAll();
 		taches.stream()
 				.filter(tache -> tache.getStatut()== AttributsStatutsTaches.ENCOURS && tache.getDate().isBefore(LocalDate.now()) )
@@ -149,7 +139,6 @@ public class TacheService implements ITacheService {
 	@Override
 	public void deleteById(Long idTache) {
 		tacheRepository.deleteById(idTache);
-		return;
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------//
@@ -160,14 +149,18 @@ public class TacheService implements ITacheService {
 	
 	@Override
 	public List<TacheDto> findAll(Long idUtilisateur) {
-		List<Projet> projets = utilisateurRepository.findById(idUtilisateur).get().getProjets();
-		List<TacheDto> tachesDto = new ArrayList<>();
-		for (Projet projet : projets) {
-			List<Tache> taches = projet.getTaches();
-			taches.stream().filter(tache -> tache.getStatut() != AttributsStatutsTaches.DONE).map(tache -> new TacheDto(tache, projet.getId())).forEach(tacheDto-> tachesDto.add(tacheDto));;
+		Optional<Utilisateur> user = utilisateurRepository.findById(idUtilisateur);
+		if (user.isPresent()) {
+			List<Projet> projets = user.get().getProjets();
+			List<TacheDto> tachesDto = new ArrayList<>();
 			
+			for (Projet projet : projets) {
+				List<Tache> taches = projet.getTaches();
+				taches.stream().filter(tache -> tache.getStatut() != AttributsStatutsTaches.DONE).map(tache -> new TacheDto(tache, projet.getId())).forEach(tacheDto-> tachesDto.add(tacheDto));
+			}	
+			return tachesDto;
 		}
-		return tachesDto;
+		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------------------//
@@ -177,21 +170,21 @@ public class TacheService implements ITacheService {
 			*/
 		@Override
 		public void update(TacheDto tacheDto) {
-			Tache tache = tacheRepository.findById(tacheDto.getId()).get();
-			tache.setTitre(tacheDto.getTitre());
-			tache.setDate(tacheDto.getDate());
-			tache.setPriorite(tacheDto.getPriorite());
-			tache.setStatut(tacheDto.getStatut());
+			Optional<Tache> optTache = tacheRepository.findById(tacheDto.getId());
 			
-			List<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
-			taches.add(tache);
-			projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
-			
-			tacheRepository.save(tache);
-			return;
-			
-		}
-
-	
+			if (optTache.isPresent()) {
+				Tache tache = optTache.get();
+				tache.setTitre(tacheDto.getTitre());
+				tache.setDate(tacheDto.getDate());
+				tache.setPriorite(tacheDto.getPriorite());
+				tache.setStatut(tacheDto.getStatut());
+				
+				List<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
+				taches.add(tache);
+				projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
+				tacheRepository.save(tache);			
+			}
+			else throw new NotFoundException(NotFoundException.UNRECOGNIZEDTASK);	
+		}	
 	
 }

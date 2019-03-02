@@ -12,15 +12,10 @@ public class TacheDto {
 	private String statut;
 	private Long id;
 	private Long idProjet;
-	
-	
-	
-
 
 
 	public TacheDto() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public TacheDto(Tache tache, Long idProjet) {

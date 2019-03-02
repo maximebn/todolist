@@ -91,6 +91,5 @@ IProjetServiceC projetService;
 	@ResponseBody
 	public void update(@RequestBody ProjetDtoC projetDto) {
 		projetService.update(projetDto);
-		return;
 	}
 }
