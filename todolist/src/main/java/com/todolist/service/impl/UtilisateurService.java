@@ -140,19 +140,18 @@ public class UtilisateurService implements IUtilisateurService {
 		 * @return long
 		 */
 	@Override
-		public long calculTotalParPriorite(List<TacheDto> list) {
-			long nTransforme = 0;
+		public double calculTotalParPriorite(List<TacheDto> list) {
+			double nTransforme = 0;
 			for (TacheDto t : list) {
-				if (t.getPriorite() != null) {
-					if (t.getPriorite() == AttributsPrioriteTaches.PRIORITAIRE)
+					System.out.println(t.getPriorite());
+					if (t.getPriorite().equals(AttributsPrioriteTaches.PRIORITAIRE))
 						nTransforme = nTransforme+ 3;
-					else if (t.getPriorite() == AttributsPrioriteTaches.IMPORTANTE)
+					else if (t.getPriorite().equals(AttributsPrioriteTaches.IMPORTANTE))
 						 nTransforme = nTransforme+ 2;
-					else if (t.getPriorite() == AttributsPrioriteTaches.NORMALE)
+					else if (t.getPriorite().equals(AttributsPrioriteTaches.NORMALE))
 						 nTransforme = nTransforme+ 1;
-					}
-				else nTransforme = nTransforme+ 1;
-				}
+					else nTransforme = nTransforme+ 1;
+			}
 			System.out.println(nTransforme);
 			return nTransforme;
 		}
@@ -165,16 +164,15 @@ public class UtilisateurService implements IUtilisateurService {
 			 * @return long
 			 */
 		@Override
-		public long getIndicePerformance(long idUtilisateur) {
+		public double getIndicePerformance(long idUtilisateur) {
 			Optional<Utilisateur> opt = utilisateurRepository.findById(idUtilisateur);
 			LocalDate sixDaysAgo = LocalDate.now().minusDays(6);
 			
 			if (opt.isPresent()) {
-				List <TacheDto> tachesEnRetard = tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.ENRETARD).collect(Collectors.toList());
-				List <TacheDto> tachesEffectuees= tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut()==AttributsStatutsTaches.DONE).collect(Collectors.toList());
-				System.out.println(tachesEffectuees.get(1));
+				List <TacheDto> tachesEnRetard = tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut().equals(AttributsStatutsTaches.ENRETARD)).collect(Collectors.toList());
+				List <TacheDto> tachesEffectuees= tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut().equals(AttributsStatutsTaches.DONE)).collect(Collectors.toList());
 				
-				double nbreTotal = (double)(this.calculTotalParPriorite(tachesEffectuees) + this.calculTotalParPriorite(tachesEnRetard));
+				double nbreTotal = (this.calculTotalParPriorite(tachesEffectuees) + this.calculTotalParPriorite(tachesEnRetard));
 				double indiceDePerformance = 0;
 				
 				if (nbreTotal > 0) {

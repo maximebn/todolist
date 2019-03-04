@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.service.IUtilisateurService;
@@ -28,6 +29,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private IUtilisateurService utilisateurService;
+	
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder() {
+			@Override
+			public boolean matches(CharSequence arg0, String arg1) {
+				return arg0.equals(arg1);
+			}
+			
+			@Override
+			public String encode(CharSequence arg0) {
+				return arg0.toString();
+			}
+			};
+	}
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {    

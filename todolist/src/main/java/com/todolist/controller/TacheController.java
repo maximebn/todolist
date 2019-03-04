@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dto.TacheDto;
+import com.todolist.exception.NotIdentifiedException;
 import com.todolist.service.ITacheService;
+import com.todolist.utils.AuthChecker;
 
 /**
  * @author Dell
@@ -24,16 +25,16 @@ import com.todolist.service.ITacheService;
 @RestController
 @RequestMapping(value="/api/tache")
 public class TacheController {
-	@Autowired
-	ITacheService tacheService;
 	
+	@Autowired ITacheService tacheService;
+	@Autowired private AuthChecker authChecker;
 	
 	
 	/** Permet de rentrer et sauvegarder une nouvelle tache
 	 * @param tacheDto
 	 * @return tacheDto
 	 */
-	@PostMapping
+	@PostMapping(value="/newTache")
 	public TacheDto save(@RequestBody TacheDto tacheDto) {	
 		return tacheService.save(tacheDto);
 	}
@@ -45,9 +46,12 @@ public class TacheController {
 	 * @throws ParseException
 	 */
 	@GetMapping(value="/todayList")
-	public List<TacheDto> getForToday(@RequestParam long id) {
-			LocalDate today = LocalDate.now();
-			return tacheService.findByDate(today, id);
+	public List<TacheDto> getForToday() {
+		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
+		long idUtilisateur = authChecker.getUserIdFromToken();
+		
+		LocalDate today = LocalDate.now();
+		return tacheService.findByDate(today, idUtilisateur);
 	}
 	
 	/** Permet d'afficher une liste de taches pour aujourdh'hui et les 6 prochains jours
@@ -56,16 +60,19 @@ public class TacheController {
 	 * @throws ParseException
 	 */
 	@GetMapping(value="/weekList")
-	public List<TacheDto> getForNextWeek(@RequestParam long id) {
-			LocalDate today = LocalDate.now();
-			return tacheService.findForWeek(today, id);
+	public List<TacheDto> getForNextWeek(){
+		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
+		long idUtilisateur = authChecker.getUserIdFromToken();
+		
+		LocalDate today = LocalDate.now();
+		return tacheService.findForWeek(today, idUtilisateur);
 	}
 
 	/** Permet d'effacer une tache
 	 * @param idTache
 	 */
-	@DeleteMapping(value="/{idTache}")
- 	public void deleteById(@PathVariable Long idTache) {		
+	@DeleteMapping(value="/deleteTache")
+ 	public void deleteById(@RequestParam Long idTache) {		
 	}
  		
 	
@@ -73,8 +80,11 @@ public class TacheController {
 	 * @param idUtilisateur
 	 * @return ListTacheDto
 	 */
-	@GetMapping(value="/All/{idUtilisateur}")
-	public List<TacheDto> findAll(@PathVariable Long idUtilisateur) {
+	@GetMapping(value="/listAllTaches")
+	public List<TacheDto> findAll() {
+		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
+		long idUtilisateur = authChecker.getUserIdFromToken();
+		
 		return tacheService.findAll(idUtilisateur);
 	}
 	
@@ -82,7 +92,7 @@ public class TacheController {
 	/** Permet de modifier une tache
 	 * @param tacheDto
 	 */
-	@PostMapping(value="/update")
+	@PostMapping(value="/updateTache")
 	public void update(@RequestBody TacheDto tacheDto) {
 		tacheService.update(tacheDto);
 	}

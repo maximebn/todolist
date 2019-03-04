@@ -16,10 +16,10 @@ public interface IUtilisateurService {
 
 	void deleteAccount(long idUtilisateur);
 
-	long getIndicePerformance(long idUtilisateur);
+	double getIndicePerformance(long idUtilisateur);
 
 	Utilisateur findByLoginAndPassword(String username, String password);
 
-	long calculTotalParPriorite(List<TacheDto> list);
+	double calculTotalParPriorite(List<TacheDto> list);
 
 }

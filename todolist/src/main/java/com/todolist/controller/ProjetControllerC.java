@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,20 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dto.ProjetDtoC;
 import com.todolist.dto.TacheDto;
+import com.todolist.exception.NotIdentifiedException;
 import com.todolist.service.IProjetServiceC;
+import com.todolist.utils.AuthChecker;
 
 /**
  * @author Dell
- *
- *
  */
 @RestController
 @RequestMapping(value="/api/projet")
 public class ProjetControllerC {
 	
-@Autowired
-IProjetServiceC projetService;
-
+@Autowired IProjetServiceC projetService;
+@Autowired private AuthChecker authChecker;
 
 	
 	/**
@@ -38,9 +36,12 @@ IProjetServiceC projetService;
 	 * @return ProjetDto
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@PostMapping(value="/{idUtilisateur}")
+	@PostMapping(value="/saveProject")
 	@ResponseBody
-	public ProjetDtoC save(@RequestBody ProjetDtoC projetDto, @PathVariable Long idUtilisateur) {
+	public ProjetDtoC save(@RequestBody ProjetDtoC projetDto) {
+		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
+		long idUtilisateur = authChecker.getUserIdFromToken();
+		
 		return projetService.save(projetDto, idUtilisateur);
 	}
 	
@@ -50,9 +51,12 @@ IProjetServiceC projetService;
 	 * @return List<ProjetDto>
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@GetMapping(value="/{idUtilisateur}")
+	@GetMapping(value="/listAll")
 	@ResponseBody
-	public List<ProjetDtoC> findAll(@PathVariable Long idUtilisateur){
+	public List<ProjetDtoC> findAll(){
+		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
+		
+		long idUtilisateur = authChecker.getUserIdFromToken();
 		return projetService.findAll(idUtilisateur);
 	}
 	
@@ -62,7 +66,7 @@ IProjetServiceC projetService;
 	 * @return List<TacheDto>
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@GetMapping
+	@GetMapping(value="/listOne")
 	@ResponseBody
 	public List<TacheDto> findById( @RequestParam Long idProjet){
 		return projetService.findById(idProjet);
@@ -74,10 +78,13 @@ IProjetServiceC projetService;
 	 * @return List<ProjetDto>
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@DeleteMapping(value="/delete/{idProjet}/{idUtilisateur}")
+	@DeleteMapping(value="/deleteProject")
 	@ResponseBody
-	public List<ProjetDtoC> deleteById(@PathVariable Long idProjet, @PathVariable Long idUtilisateur){
-		 projetService.deleteById(idProjet);
+	public List<ProjetDtoC> deleteById(@RequestParam Long idProjet){
+		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
+		long idUtilisateur = authChecker.getUserIdFromToken();
+		
+		projetService.deleteById(idProjet);
 		 return projetService.findAll(idUtilisateur);
 	}
 	
@@ -87,7 +94,7 @@ IProjetServiceC projetService;
 	 * @param projetDto
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@PutMapping(value="/update")
+	@PutMapping(value="/updateProject")
 	@ResponseBody
 	public void update(@RequestBody ProjetDtoC projetDto) {
 		projetService.update(projetDto);
