@@ -9,5 +9,4 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long>{
 	@Query(value =  "SELECT * FROM utilisateur WHERE Mail = ?1", nativeQuery = true)
 	Utilisateur findByLogin(String username);
 	
-	
 }
