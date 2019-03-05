@@ -74,7 +74,7 @@ public class TacheService implements ITacheService {
 			
 			for (Projet p : u.get().getProjets()) {
 				p.getTaches().stream()
-									.filter(tache -> (tache.getDate().isEqual(date) && (tache.getStatut() != AttributsStatutsTaches.DONE)) || tache.getStatut() == AttributsStatutsTaches.ENRETARD)
+									.filter(tache -> (tache.getDate().isEqual(date) && (!tache.getStatut().equals(AttributsStatutsTaches.DONE))) || tache.getStatut().equals(AttributsStatutsTaches.ENRETARD))
 									.map(tache -> new TacheDto(tache, p.getId()))
 									.forEach(dtotache -> tacheListDto.add(dtotache));
 				}
@@ -127,7 +127,7 @@ public class TacheService implements ITacheService {
 	public void updateStatutTaches(List<TacheDto> list) {
 		List<Tache> taches = tacheRepository.findAll();
 		taches.stream()
-				.filter(tache -> tache.getStatut()== AttributsStatutsTaches.ENCOURS && tache.getDate().isBefore(LocalDate.now()) )
+				.filter(tache -> tache.getStatut().equals(AttributsStatutsTaches.ENCOURS) && tache.getDate().isBefore(LocalDate.now()) )
 				.forEach(tache -> tache.setStatut(AttributsStatutsTaches.ENRETARD));
 	}
 
@@ -156,7 +156,7 @@ public class TacheService implements ITacheService {
 			
 			for (Projet projet : projets) {
 				List<Tache> taches = projet.getTaches();
-				taches.stream().filter(tache -> tache.getStatut() != AttributsStatutsTaches.DONE).map(tache -> new TacheDto(tache, projet.getId())).forEach(tacheDto-> tachesDto.add(tacheDto));
+				taches.stream().filter(tache -> !tache.getStatut().equals(AttributsStatutsTaches.DONE)).map(tache -> new TacheDto(tache, projet.getId())).forEach(tacheDto-> tachesDto.add(tacheDto));
 			}	
 			return tachesDto;
 		}

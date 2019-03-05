@@ -13,7 +13,6 @@ public interface ITacheService {
 	List<TacheDto> findForWeek(LocalDate today, long id);
 	void deleteById(Long idTache);
 	List<TacheDto> findAll(Long idUtilisateur);
-	void update(TacheDto tacheDto);
-	
+	void update(TacheDto tacheDto);	
 
 }

@@ -36,7 +36,7 @@ public class ProjetControllerC {
 	 * @return ProjetDto
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@PostMapping(value="/saveProject")
+	@PostMapping(value="/save")
 	@ResponseBody
 	public ProjetDtoC save(@RequestBody ProjetDtoC projetDto) {
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
@@ -51,7 +51,7 @@ public class ProjetControllerC {
 	 * @return List<ProjetDto>
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@GetMapping(value="/listAll")
+	@GetMapping(value="/findAll")
 	@ResponseBody
 	public List<ProjetDtoC> findAll(){
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
@@ -66,7 +66,7 @@ public class ProjetControllerC {
 	 * @return List<TacheDto>
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@GetMapping(value="/listOne")
+	@GetMapping(value="/findOne")
 	@ResponseBody
 	public List<TacheDto> findById( @RequestParam Long idProjet){
 		return projetService.findById(idProjet);
@@ -78,7 +78,7 @@ public class ProjetControllerC {
 	 * @return List<ProjetDto>
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@DeleteMapping(value="/deleteProject")
+	@DeleteMapping(value="/deleteById")
 	@ResponseBody
 	public List<ProjetDtoC> deleteById(@RequestParam Long idProjet){
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
@@ -94,7 +94,7 @@ public class ProjetControllerC {
 	 * @param projetDto
 	 * L'utilisateur doit être authentifié grâce au token.
 	 */
-	@PutMapping(value="/updateProject")
+	@PutMapping(value="/update")
 	@ResponseBody
 	public void update(@RequestBody ProjetDtoC projetDto) {
 		projetService.update(projetDto);

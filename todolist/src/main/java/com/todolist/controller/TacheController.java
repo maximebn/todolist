@@ -34,7 +34,7 @@ public class TacheController {
 	 * @param tacheDto
 	 * @return tacheDto
 	 */
-	@PostMapping(value="/newTache")
+	@PostMapping(value="/save")
 	public TacheDto save(@RequestBody TacheDto tacheDto) {	
 		return tacheService.save(tacheDto);
 	}
@@ -71,7 +71,7 @@ public class TacheController {
 	/** Permet d'effacer une tache
 	 * @param idTache
 	 */
-	@DeleteMapping(value="/deleteTache")
+	@DeleteMapping(value="/deleteOne")
  	public void deleteById(@RequestParam Long idTache) {		
 	}
  		
@@ -80,7 +80,7 @@ public class TacheController {
 	 * @param idUtilisateur
 	 * @return ListTacheDto
 	 */
-	@GetMapping(value="/listAllTaches")
+	@GetMapping(value="/findAll")
 	public List<TacheDto> findAll() {
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
 		long idUtilisateur = authChecker.getUserIdFromToken();
@@ -92,7 +92,7 @@ public class TacheController {
 	/** Permet de modifier une tache
 	 * @param tacheDto
 	 */
-	@PostMapping(value="/updateTache")
+	@PostMapping(value="/update")
 	public void update(@RequestBody TacheDto tacheDto) {
 		tacheService.update(tacheDto);
 	}
