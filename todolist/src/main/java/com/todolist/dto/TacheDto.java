@@ -11,20 +11,20 @@ public class TacheDto {
 	private String priorite;
 	private String statut;
 	private Long id;
-	private Long idProjet;
+	private ProjetDto projet;
 
 
 	public TacheDto() {
 		super();
 	}
 
-	public TacheDto(Tache tache, Long idProjet) {
+	public TacheDto(Tache tache, ProjetDto projetDto) {
 		this.setId(tache.getId());
 		this.setTitre(tache.getTitre());
 		this.setDate(tache.getDate());
 		this.setPriorite(tache.getPriorite());
 		this.setStatut(tache.getStatut());
-		this.setIdProjet(idProjet);
+		this.setProjet(projetDto);
 	}
 
 	public String getTitre() {
@@ -67,12 +67,13 @@ public class TacheDto {
 		this.id = id;
 	}
 
-	public Long getIdProjet() {
-		return idProjet;
+	public ProjetDto getProjet() {
+		return projet;
 	}
 
-	public void setIdProjet(Long idProjet) {
-		this.idProjet = idProjet;
+	public void setProjet(ProjetDto projet) {
+		this.projet = projet;
 	}
 
+	
 }

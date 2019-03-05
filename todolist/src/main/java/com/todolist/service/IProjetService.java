@@ -2,10 +2,10 @@ package com.todolist.service;
 
 import java.util.List;
 
-import com.todolist.dto.ProjetDtoC;
+import com.todolist.dto.ProjetDto;
 import com.todolist.dto.TacheDto;
 
-public interface IProjetServiceC {
+public interface IProjetService {
 
 	/**
 	 * Créer un projet
@@ -13,14 +13,14 @@ public interface IProjetServiceC {
 	 * @param idUtilisateur
 	 * @return ProjetDto
 	 */
-	ProjetDtoC save(ProjetDtoC projetDto, Long idUtilisateur);
+	ProjetDto save(ProjetDto projetDto, Long idUtilisateur);
 
 	/**
 	 * Lister l'ensemble des projets d'un utilisateur donné.
 	 * @param idUtilisateur
 	 * @return List ProjetDto
 	 */
-	List<ProjetDtoC> findAll(Long idUtilisateur);
+	List<ProjetDto> findAll(Long idUtilisateur);
 
 	/**
 	 * Lister les tâches d'un projet d'un utilisateur donnée.
@@ -40,6 +40,6 @@ public interface IProjetServiceC {
 	 * Mettre à jour un projet d'un utilisateur donné.
 	 * @param projetDto
 	 */
-	void update(ProjetDtoC projetDto);
+	void update(ProjetDto projetDto);
 
 }

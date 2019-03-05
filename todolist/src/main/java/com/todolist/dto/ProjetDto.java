@@ -2,7 +2,7 @@ package com.todolist.dto;
 
 import com.todolist.persistence.entity.Projet;
 
-public class ProjetDtoC {
+public class ProjetDto {
 
 	
 	private Long id;
@@ -10,11 +10,11 @@ public class ProjetDtoC {
 	private String titre;
 	
 	
-	public ProjetDtoC() {
+	public ProjetDto() {
 		super();
 	}
 	
-	public ProjetDtoC(Projet projet) {
+	public ProjetDto(Projet projet) {
 		this.setId(projet.getId());
 		this.setTitre(projet.getTitre());
 	}

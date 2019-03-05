@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.todolist.dto.ProjetDto;
 import com.todolist.dto.TacheDto;
 import com.todolist.exception.NotFoundException;
 import com.todolist.persistence.entity.Projet;
@@ -21,7 +22,7 @@ import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.persistence.repository.ProjetRepository;
 import com.todolist.persistence.repository.TacheRepository;
 import com.todolist.persistence.repository.UtilisateurRepository;
-import com.todolist.service.IProjetServiceC;
+import com.todolist.service.IProjetService;
 import com.todolist.service.ITacheService;
 import com.todolist.utils.AttributsStatutsTaches;
 
@@ -32,7 +33,7 @@ public class TacheService implements ITacheService {
 	@Autowired TacheRepository tacheRepository;
 	@Autowired ProjetRepository projetRepository;
 	@Autowired UtilisateurRepository utilisateurRepository;
-	@Autowired IProjetServiceC projetService;
+	@Autowired IProjetService projetService;
 	
 	
 	// ---------------------------------------------------------------------------------------------------------------------------//
@@ -48,10 +49,10 @@ public class TacheService implements ITacheService {
 		tache.setDate(tacheDto.getDate());
 		tache.setPriorite(tacheDto.getPriorite());
 		tache.setStatut(AttributsStatutsTaches.ENCOURS);
-		
-		List<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
+		Long idProjet=tacheDto.getProjet().getId();
+		List<Tache> taches= projetRepository.findById(idProjet).get().getTaches();
 		taches.add(tache);
-		projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
+		projetRepository.findById(idProjet).get().setTaches(taches);
 		
 		tacheRepository.save(tache);
 		tacheDto.setStatut(tache.getStatut());
@@ -73,9 +74,11 @@ public class TacheService implements ITacheService {
 		if (u.isPresent()) {
 			
 			for (Projet p : u.get().getProjets()) {
+				
+				ProjetDto projetDto= new ProjetDto(p);
 				p.getTaches().stream()
 									.filter(tache -> (tache.getDate().isEqual(date) && (!tache.getStatut().equals(AttributsStatutsTaches.DONE))) || tache.getStatut().equals(AttributsStatutsTaches.ENRETARD))
-									.map(tache -> new TacheDto(tache, p.getId()))
+									.map(tache -> new TacheDto(tache, projetDto))
 									.forEach(dtotache -> tacheListDto.add(dtotache));
 				}
 				return tacheListDto;
@@ -155,8 +158,12 @@ public class TacheService implements ITacheService {
 			List<TacheDto> tachesDto = new ArrayList<>();
 			
 			for (Projet projet : projets) {
+				
+				ProjetDto projetDto = new ProjetDto(projet);
 				List<Tache> taches = projet.getTaches();
-				taches.stream().filter(tache -> !tache.getStatut().equals(AttributsStatutsTaches.DONE)).map(tache -> new TacheDto(tache, projet.getId())).forEach(tacheDto-> tachesDto.add(tacheDto));
+				taches.stream().filter(tache -> !tache.getStatut().equals(AttributsStatutsTaches.DONE)).map(tache -> new TacheDto(tache, projetDto)).forEach(tacheDto-> tachesDto.add(tacheDto));
+				
+				
 			}	
 			return tachesDto;
 		}
@@ -178,10 +185,10 @@ public class TacheService implements ITacheService {
 				tache.setDate(tacheDto.getDate());
 				tache.setPriorite(tacheDto.getPriorite());
 				tache.setStatut(tacheDto.getStatut());
-				
-				List<Tache> taches= projetRepository.findById(tacheDto.getIdProjet()).get().getTaches();
+				Long idProjet=tacheDto.getProjet().getId();
+				List<Tache> taches= projetRepository.findById(idProjet).get().getTaches();
 				taches.add(tache);
-				projetRepository.findById(tacheDto.getIdProjet()).get().setTaches(taches);
+				projetRepository.findById(idProjet).get().setTaches(taches);
 				tacheRepository.save(tache);			
 			}
 			else throw new NotFoundException(NotFoundException.UNRECOGNIZEDTASK);	

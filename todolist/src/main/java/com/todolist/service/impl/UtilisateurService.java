@@ -13,14 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.todolist.dto.ProjetDtoC;
+import com.todolist.dto.ProjetDto;
 import com.todolist.dto.TacheDto;
 import com.todolist.dto.UtilisateurDto;
 import com.todolist.exception.NotFoundException;
 import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.persistence.repository.UtilisateurRepository;
 import com.todolist.service.IEmailService;
-import com.todolist.service.IProjetServiceC;
+import com.todolist.service.IProjetService;
 import com.todolist.service.ITacheService;
 import com.todolist.service.IUtilisateurService;
 import com.todolist.utils.AttributsPrioriteTaches;
@@ -34,7 +34,7 @@ public class UtilisateurService implements IUtilisateurService {
 	private  BCryptPasswordEncoder passwordEncoder = new  BCryptPasswordEncoder();
 	
 	@Autowired UtilisateurRepository utilisateurRepository;
-	@Autowired IProjetServiceC projetService;
+	@Autowired IProjetService projetService;
 	@Autowired ITacheService tacheService;
 	@Autowired IEmailService emailService;
 	@Autowired UtilisateurRepository utilisateurRepo;
@@ -71,7 +71,7 @@ public class UtilisateurService implements IUtilisateurService {
 		
 		utilisateurRepository.save(user);
 		
-		ProjetDtoC projetDto = new ProjetDtoC();
+		ProjetDto projetDto = new ProjetDto();
 		projetDto.setTitre("Inbox");
 		projetService.save(projetDto, user.getId());
 

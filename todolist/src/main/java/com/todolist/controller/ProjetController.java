@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.todolist.dto.ProjetDtoC;
+import com.todolist.dto.ProjetDto;
 import com.todolist.dto.TacheDto;
 import com.todolist.exception.NotIdentifiedException;
-import com.todolist.service.IProjetServiceC;
+import com.todolist.service.IProjetService;
 import com.todolist.utils.AuthChecker;
 
 /**
@@ -24,9 +24,9 @@ import com.todolist.utils.AuthChecker;
  */
 @RestController
 @RequestMapping(value="/api/projet")
-public class ProjetControllerC {
+public class ProjetController {
 	
-@Autowired IProjetServiceC projetService;
+@Autowired IProjetService projetService;
 @Autowired private AuthChecker authChecker;
 
 	
@@ -38,7 +38,7 @@ public class ProjetControllerC {
 	 */
 	@PostMapping(value="/save")
 	@ResponseBody
-	public ProjetDtoC save(@RequestBody ProjetDtoC projetDto) {
+	public ProjetDto save(@RequestBody ProjetDto projetDto) {
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
 		long idUtilisateur = authChecker.getUserIdFromToken();
 		
@@ -53,7 +53,7 @@ public class ProjetControllerC {
 	 */
 	@GetMapping(value="/findAll")
 	@ResponseBody
-	public List<ProjetDtoC> findAll(){
+	public List<ProjetDto> findAll(){
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
 		
 		long idUtilisateur = authChecker.getUserIdFromToken();
@@ -80,7 +80,7 @@ public class ProjetControllerC {
 	 */
 	@DeleteMapping(value="/deleteById")
 	@ResponseBody
-	public List<ProjetDtoC> deleteById(@RequestParam Long idProjet){
+	public List<ProjetDto> deleteById(@RequestParam Long idProjet){
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
 		long idUtilisateur = authChecker.getUserIdFromToken();
 		
@@ -96,7 +96,7 @@ public class ProjetControllerC {
 	 */
 	@PutMapping(value="/update")
 	@ResponseBody
-	public void update(@RequestBody ProjetDtoC projetDto) {
+	public void update(@RequestBody ProjetDto projetDto) {
 		projetService.update(projetDto);
 	}
 }

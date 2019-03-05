@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.todolist.dto.UtilisateurDto;
 import com.todolist.exception.NotIdentifiedException;
-import com.todolist.service.IProjetServiceC;
+import com.todolist.service.IProjetService;
 import com.todolist.service.IUtilisateurService;
 import com.todolist.utils.AuthChecker;
 
@@ -23,7 +23,7 @@ import com.todolist.utils.AuthChecker;
 @RequestMapping(value="/api")
 public class UserController {
 	
-@Autowired IProjetServiceC projetService;
+@Autowired IProjetService projetService;
 @Autowired IUtilisateurService utilisateurService;
 @Autowired private AuthChecker authChecker;
 
