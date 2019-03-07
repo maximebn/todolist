@@ -61,7 +61,6 @@ public class OAuth2ServerConfig {
 		@Override
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 			endpoints.tokenStore(tokenStore).authenticationManager(authenticationManager);
-			endpoints.pathMapping("/oauth/token", "/api/login");
 		}
 
 		@Bean

@@ -18,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.service.IUtilisateurService;
 
@@ -44,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			}
 			};
 	}
+	
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {    
@@ -83,13 +83,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring()
 		.antMatchers("/api/registration");
 	}
-
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+		.cors().and()
 		.csrf().disable()
 		.authorizeRequests()		
 		.anyRequest()		
 		.permitAll();
 	}
+	
 }
