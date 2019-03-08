@@ -17,6 +17,7 @@ import com.todolist.dto.ProjetDto;
 import com.todolist.dto.TacheDto;
 import com.todolist.dto.UtilisateurDto;
 import com.todolist.exception.NotFoundException;
+import com.todolist.exception.UsedAdressException;
 import com.todolist.persistence.entity.Utilisateur;
 import com.todolist.persistence.repository.UtilisateurRepository;
 import com.todolist.service.IEmailService;
@@ -78,8 +79,11 @@ public class UtilisateurService implements IUtilisateurService {
 		return userDto;
 	}
 		else {
+			if (!emailService.isValidEmailAddress(userDto.getMail())) {
 			throw new AddressException(unrecognizedMail);
 		}
+			throw new UsedAdressException();
+	}
 	}
 	
 	
