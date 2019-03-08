@@ -7,6 +7,7 @@ import javax.mail.internet.AddressException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,6 +54,13 @@ public double getCompletionIndex() {
 	
 	return utilisateurService.getIndicePerformance(idUtilisateur);
 }	
+
+@DeleteMapping(value="/user/delete")
+public void deleteAccount(@RequestBody UtilisateurDto  userDto) throws AddressException {
+	if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
+	long idUtilisateur = authChecker.getUserIdFromToken();
+	utilisateurService.deleteAccount( idUtilisateur);
+}
 
 
 }

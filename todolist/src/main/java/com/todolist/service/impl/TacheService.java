@@ -100,6 +100,7 @@ public class TacheService implements ITacheService {
 			List <TacheDto> tacheListDto = new ArrayList<>();
 
 			this.findByDate(startDate, idUtilisateur)
+			.stream()
 			.forEach(dtotache -> tacheListDto.add(dtotache));
 			
 			for (int i=1; i<7; i++) {
