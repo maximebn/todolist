@@ -98,15 +98,19 @@ public class TacheService implements ITacheService {
 	@Override
 		public List<TacheDto> findForWeek(LocalDate startDate, long idUtilisateur) {
 			List <TacheDto> tacheListDto = new ArrayList<>();
+
+			this.findByDate(startDate, idUtilisateur)
+			.forEach(dtotache -> tacheListDto.add(dtotache));
 			
-			for (int i=0; i<7; i++) {
+			for (int i=1; i<7; i++) {
 				LocalDate date = startDate.plusDays(i);
 				this.findByDate(date, idUtilisateur)
+					.stream()
+					.filter(dtotache -> dtotache.getStatut().equals(AttributsStatutsTaches.ENCOURS))
 					.forEach(dtotache -> tacheListDto.add(dtotache));
 				}
 			return tacheListDto;
 		}
-	
 	
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	/** Tri d'une liste de tâches par date d'échéance.
