@@ -56,7 +56,7 @@ public double getCompletionIndex() {
 }	
 
 @DeleteMapping(value="/user/delete")
-public void deleteAccount(@RequestBody UtilisateurDto  userDto) throws AddressException {
+public void deleteAccount() throws AddressException {
 	if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
 	long idUtilisateur = authChecker.getUserIdFromToken();
 	utilisateurService.deleteAccount( idUtilisateur);
