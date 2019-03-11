@@ -170,6 +170,7 @@ public class TacheService implements ITacheService {
 				
 				
 			}	
+			this.triTacheByDate(tachesDto);
 			return tachesDto;
 		}
 		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
