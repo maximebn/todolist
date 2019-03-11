@@ -88,8 +88,9 @@ public class ProjetService implements IProjetService{
 		if (projet.isPresent()) {
 			
 			return projet.get().getTaches().stream()
-					.filter(tache -> (tache.getStatut() != AttributsStatutsTaches.DONE))
-					.map(tache -> new TacheDto(tache,projetDto)).collect(Collectors.toList());
+					.filter(tache ->tache.getStatut().compareTo(AttributsStatutsTaches.DONE) != 0)
+				/**((tache.getStatut().equals(AttributsStatutsTaches.ENCOURS))|| (tache.getStatut().equals(AttributsStatutsTaches.ENRETARD))))
+				*/	.map(tache -> new TacheDto(tache,projetDto)).collect(Collectors.toList());
 		}
 		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDPROJECT);
 	}
