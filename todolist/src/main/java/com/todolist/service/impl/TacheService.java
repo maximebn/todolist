@@ -190,7 +190,14 @@ public class TacheService implements ITacheService {
 				tache.setTitre(tacheDto.getTitre());
 				tache.setDate(tacheDto.getDate());
 				tache.setPriorite(tacheDto.getPriorite());
-				tache.setStatut(tacheDto.getStatut());
+				if(tacheDto.getStatut().toLowerCase().compareTo("effectuée")==0 ) {
+				tache.setStatut(AttributsStatutsTaches.DONE);
+				}
+				else if (tacheDto.getStatut().toLowerCase().compareTo("en retard")==0) {
+					tache.setStatut(AttributsStatutsTaches.ENRETARD);
+				}
+				else { tache.setStatut(AttributsStatutsTaches.ENCOURS);
+				}
 				Long idProjet=tacheDto.getProjet().getId();
 				List<Tache> taches= projetRepository.findById(idProjet).get().getTaches();
 				taches.add(tache);
