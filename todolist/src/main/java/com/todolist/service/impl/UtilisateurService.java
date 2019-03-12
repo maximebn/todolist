@@ -148,6 +148,7 @@ public class UtilisateurService implements IUtilisateurService {
 		public double calculTotalParPriorite(List<TacheDto> list) {
 			double nTransforme = 0;
 			for (TacheDto t : list) {
+				if(t.getPriorite()!=null) {
 					System.out.println(t.getPriorite());
 					if (t.getPriorite().equals(AttributsPrioriteTaches.PRIORITAIRE))
 						nTransforme = nTransforme+ 3;
@@ -155,7 +156,12 @@ public class UtilisateurService implements IUtilisateurService {
 						 nTransforme = nTransforme+ 2;
 					else if (t.getPriorite().equals(AttributsPrioriteTaches.NORMALE))
 						 nTransforme = nTransforme+ 1;
-					else nTransforme = nTransforme+ 1;
+					else if (t.getPriorite().isEmpty())
+						nTransforme = nTransforme+ 1;
+			}
+				else {
+					nTransforme = nTransforme+ 1;
+				}
 			}
 			System.out.println(nTransforme);
 			return nTransforme;
