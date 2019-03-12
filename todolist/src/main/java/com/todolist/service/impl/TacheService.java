@@ -90,28 +90,79 @@ public class TacheService implements ITacheService {
 	
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	/**
+	 * Lister les tâches d'un utilisateur à une date donnée avec statut Done
+	 * @param date
+	 * @return List
+	 */
+	@Override
+	public List<TacheDto> findDone(LocalDate date, long idUtilisateur) {
+		Optional<Utilisateur> u = utilisateurRepository.findById(idUtilisateur);
+		List <TacheDto> tacheListDto = new ArrayList<>();
+		
+		if (u.isPresent()) {
+			
+			for (Projet p : u.get().getProjets()) {
+				
+				ProjetDto projetDto= new ProjetDto(p);
+				p.getTaches().stream()
+									.filter(tache -> (tache.getDate().isEqual(date) && (tache.getStatut().equals(AttributsStatutsTaches.DONE))))
+									.map(tache -> new TacheDto(tache, projetDto))
+									.forEach(dtotache -> tacheListDto.add(dtotache));
+				}
+				return tacheListDto;
+		}
+		else {
+			throw new NotFoundException (NotFoundException.UNRECOGNIZEDUSER);
+		}
+	}
+	
+	
+	// ---------------------------------------------------------------------------------------------------------------------------//
+	/**
 	 * Lister les tâches d'un utilisateur pour les 6 prochains jours
 	 * @param date
 	 * @return List
 	 */
 	
 	@Override
-		public List<TacheDto> findForWeek(LocalDate startDate, long idUtilisateur) {
+		public List<TacheDto> findDoneForWeek(LocalDate startDate, long idUtilisateur) {
 			List <TacheDto> tacheListDto = new ArrayList<>();
 
-			this.findByDate(startDate, idUtilisateur)
-			.stream()
-			.forEach(dtotache -> tacheListDto.add(dtotache));
-			
-			for (int i=1; i<7; i++) {
+			for (int i=0; i<7; i++) {
 				LocalDate date = startDate.plusDays(i);
-				this.findByDate(date, idUtilisateur)
+				this.findDone(date, idUtilisateur)
 					.stream()
-					.filter(dtotache -> dtotache.getStatut().equals(AttributsStatutsTaches.ENCOURS))
 					.forEach(dtotache -> tacheListDto.add(dtotache));
 				}
 			return tacheListDto;
 		}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------//
+		/**
+		 * Lister les tâches EFFECTUEES d'un utilisateur pour les 6 prochains jours
+		 * @param date
+		 * @return List
+		 */
+		
+		@Override
+			public List<TacheDto> findForWeek(LocalDate startDate, long idUtilisateur) {
+				List <TacheDto> tacheListDto = new ArrayList<>();
+
+				this.findByDate(startDate, idUtilisateur)
+				.stream()
+				.forEach(dtotache -> tacheListDto.add(dtotache));
+				
+				for (int i=1; i<7; i++) {
+					LocalDate date = startDate.plusDays(i);
+					this.findByDate(date, idUtilisateur)
+						.stream()
+						.filter(dtotache -> dtotache.getStatut().equals(AttributsStatutsTaches.ENCOURS))
+						.forEach(dtotache -> tacheListDto.add(dtotache));
+					}
+				return tacheListDto;
+			}
+		
+		// -------------
 	
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	/** Tri d'une liste de tâches par date d'échéance.

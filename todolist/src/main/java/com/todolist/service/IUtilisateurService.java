@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.mail.internet.AddressException;
 
+import com.todolist.dto.DtoPerf;
 import com.todolist.dto.TacheDto;
 import com.todolist.dto.UtilisateurDto;
 import com.todolist.persistence.entity.Utilisateur;
@@ -16,7 +17,7 @@ public interface IUtilisateurService {
 
 	void deleteAccount(long idUtilisateur);
 
-	double getIndicePerformance(long idUtilisateur);
+	DtoPerf getIndicePerformance(long idUtilisateur);
 
 	Utilisateur findByLoginAndPassword(String username, String password);
 

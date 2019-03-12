@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.todolist.dto.DtoPerf;
 import com.todolist.dto.UtilisateurDto;
 import com.todolist.exception.NotIdentifiedException;
 import com.todolist.service.IProjetService;
@@ -48,9 +49,10 @@ public UtilisateurDto update(@RequestBody UtilisateurDto  userDto) throws Addres
 }
 
 @GetMapping(value="/user/completionIndex")
-public double getCompletionIndex() {
+public DtoPerf getCompletionIndex() {
 	if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
 	long idUtilisateur = authChecker.getUserIdFromToken();
+	System.out.println(idUtilisateur);
 	
 	return utilisateurService.getIndicePerformance(idUtilisateur);
 }	
