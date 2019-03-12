@@ -34,6 +34,8 @@ public class ProjetService implements IProjetService{
 	@Autowired
 	UtilisateurRepository utilisateurRepository;
 	
+	@Autowired
+	TacheService tacheService;
 
 	/**
 	 * Créer un projet
@@ -87,9 +89,12 @@ public class ProjetService implements IProjetService{
 		
 		if (projet.isPresent()) {
 			
-			return projet.get().getTaches().stream()
-					.filter(tache -> (tache.getStatut() != AttributsStatutsTaches.DONE))
-					.map(tache -> new TacheDto(tache,projetDto)).collect(Collectors.toList());
+			List<TacheDto>tachesDto=projet.get().getTaches().stream()
+					.filter(tache ->tache.getStatut().compareTo(AttributsStatutsTaches.DONE) != 0)
+				/**((tache.getStatut().equals(AttributsStatutsTaches.ENCOURS))|| (tache.getStatut().equals(AttributsStatutsTaches.ENRETARD))))
+				*/	.map(tache -> new TacheDto(tache,projetDto)).collect(Collectors.toList());
+			tacheService.triTacheByDate(tachesDto);
+			return tachesDto;
 		}
 		else throw new NotFoundException(NotFoundException.UNRECOGNIZEDPROJECT);
 	}
