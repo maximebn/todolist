@@ -52,6 +52,8 @@ public class TacheController {
 	public List<TacheDto> getForToday() {
 		if (authChecker.isUtilisateur() == null) throw new NotIdentifiedException();
 		long idUtilisateur = authChecker.getUserIdFromToken();
+		// Je mets à jour le statut des tâches à chaque chargement du TodayList (accueil) :
+		tacheService.updateStatutTachesParUser(idUtilisateur);
 		
 		LocalDate today = LocalDate.now();
 		return tacheService.findByDate(today, idUtilisateur);

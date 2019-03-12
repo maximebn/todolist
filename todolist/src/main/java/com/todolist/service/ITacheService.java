@@ -15,6 +15,7 @@ public interface ITacheService {
 	List<TacheDto> findAll(Long idUtilisateur);
 	void update(TacheDto tacheDto);
 	List<TacheDto> findDone(LocalDate date, long idUtilisateur);
-	List<TacheDto> findDoneForWeek(LocalDate startDate, long idUtilisateur);	
+	List<TacheDto> findDoneForWeek(LocalDate startDate, long idUtilisateur);
+	void updateStatutTachesParUser(long idUtilisateur);	
 
 }

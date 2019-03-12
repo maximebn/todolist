@@ -183,12 +183,32 @@ public class TacheService implements ITacheService {
 	 *  @return void
 	 */
 	@Scheduled(cron = " 0 0 1 * * * " )
-	public void updateStatutTaches(List<TacheDto> list) {
+	public void updateStatutTaches() {
 		List<Tache> taches = tacheRepository.findAll();
 		taches.stream()
 				.filter(tache -> tache.getStatut().equals(AttributsStatutsTaches.ENCOURS) && tache.getDate().isBefore(LocalDate.now()) )
 				.forEach(tache -> tache.setStatut(AttributsStatutsTaches.ENRETARD));
 	}
+	
+	// ---------------------------------------------------------------------------------------------------------------------------//
+		/** Mise à jour du statut des taches d'un utilisateur
+		 *  Passage de l'état En cours à l'état En retard si la date d'échéance est inférieure à la date du jour
+		 *  @param List
+		 *  @return void
+		 */
+		 public void updateStatutTachesParUser(long idUtilisateur) {
+			Optional<Utilisateur> user = utilisateurRepository.findById(idUtilisateur);
+			if (user.isPresent()) {
+				List<Projet> projets = user.get().getProjets();
+				
+				for (Projet projet : projets) {
+					List<Tache> taches = projet.getTaches();
+					taches.stream()
+					.filter(tache -> tache.getStatut().equals(AttributsStatutsTaches.ENCOURS) && tache.getDate().isBefore(LocalDate.now()) )
+					.forEach(tache -> tache.setStatut(AttributsStatutsTaches.ENRETARD));
+				}
+			}
+		}
 
 	// ---------------------------------------------------------------------------------------------------------------------------//
 	/** Delete une tache, via son id
