@@ -75,7 +75,8 @@ public class TacheController {
 	 * @param idTache
 	 */
 	@DeleteMapping(value="/deleteOne")
- 	public void deleteById(@RequestParam Long idTache) {		
+ 	public void deleteById(@RequestParam Long idTache) {	
+		tacheService.deleteById(idTache);
 	}
  		
 	
