@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.todolist.dto.DtoPerf;
 import com.todolist.dto.ProjetDto;
 import com.todolist.dto.TacheDto;
 import com.todolist.dto.UtilisateurDto;
@@ -168,13 +169,13 @@ public class UtilisateurService implements IUtilisateurService {
 			 * @return long
 			 */
 		@Override
-		public double getIndicePerformance(long idUtilisateur) {
+		public DtoPerf getIndicePerformance(long idUtilisateur) {
 			Optional<Utilisateur> opt = utilisateurRepository.findById(idUtilisateur);
 			LocalDate sixDaysAgo = LocalDate.now().minusDays(6);
 			
 			if (opt.isPresent()) {
 				List <TacheDto> tachesEnRetard = tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut().equals(AttributsStatutsTaches.ENRETARD)).collect(Collectors.toList());
-				List <TacheDto> tachesEffectuees= tacheService.findForWeek(sixDaysAgo, idUtilisateur).stream().filter(t -> t.getStatut().equals(AttributsStatutsTaches.DONE)).collect(Collectors.toList());
+				List <TacheDto> tachesEffectuees= tacheService.findDoneForWeek(sixDaysAgo, idUtilisateur);
 				
 				double nbreTotal = (this.calculTotalParPriorite(tachesEffectuees) + this.calculTotalParPriorite(tachesEnRetard));
 				double indiceDePerformance = 0;
@@ -182,7 +183,13 @@ public class UtilisateurService implements IUtilisateurService {
 				if (nbreTotal > 0) {
 					indiceDePerformance = (this.calculTotalParPriorite(tachesEffectuees) / nbreTotal)*100;
 				}
-				return (long)indiceDePerformance;
+				
+				DtoPerf dtoPerf = new DtoPerf();
+				dtoPerf.setNbreTachesEffectuees(tachesEffectuees.size());
+				dtoPerf.setNbreTachesEnRetard(tachesEnRetard.size());
+				dtoPerf.setIndicePerformance((long)indiceDePerformance);
+				
+				return dtoPerf;
 			}
 			else throw new NotFoundException(NotFoundException.UNRECOGNIZEDUSER);
 		}
