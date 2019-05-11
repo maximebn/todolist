@@ -10,5 +10,5 @@ Use of Spring Boot framework with OAuth2 authentication.
 - Authentication
 - Tasks management (creation, updates, deletes, projects, emailing ...)
 
-# Statut du projet
+# Project status
 Very basic features, some great improvements should be made before release. By lack of time, statu quoi ofr this project.
